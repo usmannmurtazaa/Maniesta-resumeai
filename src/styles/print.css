@@ -1,0 +1,28 @@
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .print-area,
+  .print-area * {
+    visibility: visible;
+  }
+
+  .print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  /* Hide builder controls and other non-print elements */
+  .editor-panel,
+  .preview-panel .builder-controls,
+  .mobile-toggle,
+  .save-button {
+    display: none !important;
+  }
+}

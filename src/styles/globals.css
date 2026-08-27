@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import './print.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+    background-image:
+      radial-gradient(ellipse at top left, rgba(99,102,241,0.08), transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(20,184,166,0.06), transparent 50%);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-semibold tracking-tight;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-md border border-white/30 shadow-glass;
+  }
+  .glass-card-hover {
+    @apply hover:shadow-glass-hover hover:bg-white/80 transition-all duration-300;
+  }
+}
