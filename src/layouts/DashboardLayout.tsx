@@ -6,13 +6,14 @@ import { UserMenu } from '@/components/common/UserMenu';
 import { Logo } from '@/components/common/Logo';
 import { MobileNav } from '@/components/common/MobileNav';
 import { PageTransition } from '@/components/common/PageTransition';
+import { DashboardFooter } from '@/components/common/DashboardFooter';
 import { MenuIcon, DashboardIcon, JobsIcon, BookmarkIcon, SettingsIcon } from '@/components/ui/icons';
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: <DashboardIcon size={18} /> },
   { to: '/jobs', label: 'Daily Jobs', icon: <JobsIcon size={18} /> },
   { to: '/jobs/saved', label: 'Saved Jobs', icon: <BookmarkIcon size={18} /> },
-  { to: '/settings', label: 'Settings', icon: <SettingsIcon size={18} /> },
+  { to: '/dashboard/settings', label: 'Settings', icon: <SettingsIcon size={18} /> },
 ];
 
 export function DashboardLayout() {
@@ -33,7 +34,6 @@ export function DashboardLayout() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 relative">
-      {/* Background decorative blobs */}
       <div className="pointer-events-none absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-primary-200/20 blur-3xl" />
       <div className="pointer-events-none absolute bottom-0 right-0 h-96 w-96 rounded-full bg-accent-200/20 blur-3xl" />
 
@@ -82,6 +82,8 @@ export function DashboardLayout() {
             <Outlet />
           </PageTransition>
         </main>
+
+        <DashboardFooter />
       </div>
 
       <MobileNav items={navItems} />

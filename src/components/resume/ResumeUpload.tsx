@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { useToast } from '@/contexts/ToastContext';
-import { storageService } from '@/services/firebase/storage';
 import { parseResumeText } from '@/services/parser/parseResume';
-import { Button } from '@/components/ui/Button';
 import { Spinner } from '@/components/ui/Spinner';
 
 interface ResumeUploadProps {
@@ -13,7 +11,6 @@ interface ResumeUploadProps {
 export function ResumeUpload({ onParsed }: ResumeUploadProps) {
   const user = useAuthStore((s) => s.user);
   const { showToast } = useToast();
-  const [uploading, setUploading] = useState(false);
   const [parsing, setParsing] = useState(false);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,20 +27,16 @@ export function ResumeUpload({ onParsed }: ResumeUploadProps) {
       return;
     }
 
-    setUploading(true);
+    setParsing(true);
     try {
-      const url = await storageService.uploadFile(user?.uid || 'temp', file);
-      setUploading(false);
-      setParsing(true);
       const text = await parseResumeText(file);
       const content = mapTextToResume(text);
       onParsed(content);
       showToast('success', 'Resume parsed successfully');
     } catch (error) {
-      showToast('error', 'Failed to parse resume. PDF parsing may not be supported in this demo.');
       console.error(error);
+      showToast('error', 'Failed to parse resume. Please try again.');
     } finally {
-      setUploading(false);
       setParsing(false);
     }
   };
@@ -52,7 +45,7 @@ export function ResumeUpload({ onParsed }: ResumeUploadProps) {
     <div className="flex items-center justify-center w-full">
       <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary-500 transition-colors">
         <div className="flex flex-col items-center justify-center pt-5 pb-6">
-          {uploading || parsing ? (
+          {parsing ? (
             <Spinner className="h-8 w-8" />
           ) : (
             <>

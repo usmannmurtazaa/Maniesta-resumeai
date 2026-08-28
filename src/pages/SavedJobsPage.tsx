@@ -3,10 +3,11 @@ import { useAuthStore } from '@/store/authStore';
 import { jobService } from '@/services/jobs/jobService';
 import { JobCard } from '@/components/jobs/JobCard';
 import { Spinner } from '@/components/ui/Spinner';
-import { BookmarkIcon } from '@/components/ui/icons';
 import { PageTransition } from '@/components/common/PageTransition';
+import { BackButton } from '@/components/common/BackButton';
 import { EmptyState } from '@/components/common/EmptyState';
 import { ErrorState } from '@/components/common/ErrorState';
+import { BookmarkIcon } from '@/components/ui/icons';
 import type { Job } from '@/types/job.types';
 
 export function SavedJobsPage() {
@@ -17,9 +18,8 @@ export function SavedJobsPage() {
 
   useEffect(() => {
     if (user) {
-      jobService
-        .getSavedJobs(user.uid)
-        .then((savedJobs) => setJobs(savedJobs))
+      jobService.getSavedJobs(user.uid)
+        .then(setJobs)
         .catch((err) => setError(err instanceof Error ? err.message : 'Failed to load saved jobs'))
         .finally(() => setLoading(false));
     }
@@ -31,18 +31,13 @@ export function SavedJobsPage() {
     setJobs((prev) => prev.filter((j) => j.id !== jobId));
   };
 
-  if (loading) {
-    return (
-      <div className="p-8 flex justify-center">
-        <Spinner />
-      </div>
-    );
-  }
+  if (loading) return <div className="p-8 flex justify-center"><Spinner /></div>;
 
   if (error) {
     return (
       <PageTransition>
         <div className="mx-auto max-w-7xl px-4 py-8">
+          <BackButton label="Back to Jobs" to="/jobs" />
           <ErrorState title="Error loading saved jobs" message={error} onRetry={() => window.location.reload()} />
         </div>
       </PageTransition>
@@ -52,6 +47,7 @@ export function SavedJobsPage() {
   return (
     <PageTransition>
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <BackButton label="Back to Jobs" to="/jobs" />
         <h1 className="text-3xl font-bold text-gray-900">Saved Jobs</h1>
         {jobs.length === 0 ? (
           <EmptyState

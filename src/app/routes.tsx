@@ -62,12 +62,12 @@ export const routes = [
     ],
   },
   {
-    path: '/builder/:resumeId',
-    element: <BuilderLayout />,
-  },
-  {
     path: '/builder',
     element: <BuilderLayout />,
+    children: [
+      { index: true, element: <BuilderPage /> },
+      { path: ':resumeId', element: <BuilderPage /> },
+    ],
   },
   // Jobs user-facing routes
   {

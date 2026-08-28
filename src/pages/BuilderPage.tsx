@@ -10,7 +10,6 @@ import { useToast } from '@/contexts/ToastContext';
 import { printResume } from '@/services/pdf/printUtils';
 import EditorPanel from '@/components/builder/EditorPanel';
 import PreviewPanel from '@/components/builder/PreviewPanel';
-import { Button } from '@/components/ui/Button';
 import { SaveIcon, PrinterIcon } from '@/components/ui/icons';
 import { emptyResumeContent, DEFAULT_SECTION_ORDER, defaultDesignSettings } from '@/utils/resumeDefaults';
 
@@ -23,16 +22,18 @@ export default function BuilderPage() {
   const { isMobilePreviewOpen, toggleMobilePreview } = useUIStore();
   const { showToast } = useToast();
 
-  // Load or create resume
+  // Initialize resume immediately (no Firestore read for new resume)
   useEffect(() => {
     if (resumeId) {
+      // Load existing resume from Firestore
       resumeService.getResume(resumeId).then((resume) => {
         if (resume) setResume(resume);
       });
     } else {
+      // Create empty resume locally, no database call
       const newResume: any = {
         id: '',
-        userId: '',
+        userId: '', // will be set on first save
         title: 'Untitled Resume',
         templateId: 'modern',
         content: emptyResumeContent(),
@@ -62,16 +63,15 @@ export default function BuilderPage() {
 
   // Recalculate ATS score when content or jobDescription changes
   useEffect(() => {
-  if (jobId && currentResume) {
-    jobService.getJob(jobId).then((job) => {
-      if (job && currentResume.jobDescription !== job.description) {
-        const updated = { ...currentResume, jobDescription: job.description };
+    if (currentResume?.content && currentResume.jobDescription) {
+      const result = calculateAtsScore(currentResume.content, currentResume.jobDescription);
+      if (currentResume.atsScore !== result.score) {
+        const updated = { ...currentResume, atsScore: result.score };
         setResume(updated);
         setDirty(true);
       }
-    });
-  }
-}, [jobId, currentResume, setResume, setDirty]);
+    }
+   }, [currentResume, setResume, setDirty]);
 
   const handleSave = async (data: any) => {
     if (!currentResume) return;

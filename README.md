@@ -14,7 +14,7 @@ Built with React, TypeScript, Vite, Firebase, Netlify Functions, and Gemini AI.
 
 Maniesta ResumeAI is a production‑grade SaaS platform that helps users create, optimize, and export professional resumes. It combines an intuitive resume builder with a deterministic ATS scoring engine, AI‑powered content improvement, daily job discovery, and a complete admin dashboard.
 
-**Live Demo:** [https://maniesta-resumeai.netlify.app](https://maniesta-resumeai.netlify.app)  
+**Live Demo:** [https://maniestaresumeai.netlify.app](https://maniestaresumeai.netlify.app)  
 **Portfolio:** [https://usmanmurtaza.netlify.app](https://usmanmurtaza.netlify.app)  
 
 ---

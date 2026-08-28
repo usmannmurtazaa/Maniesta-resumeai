@@ -14,35 +14,25 @@ export function JobsPage() {
     featuredJobs,
     filters,
     setJobs,
-    appendJobs,
     setFeaturedJobs,
     loading,
     setLoading,
-    lastVisible,
     setFilters,
   } = useJobStore();
   const [error, setError] = useState<string | null>(null);
 
-  const fetchJobs = useCallback(
-    async (reset: boolean) => {
-      setLoading(true);
-      setError(null);
-      try {
-        const cursor = reset ? null : useJobStore.getState().lastVisible;
-        const result = await jobService.getPublishedJobs(filters, 20, cursor);
-        if (reset) {
-          setJobs(result.jobs, result.lastVisible);
-        } else {
-          appendJobs(result.jobs, result.lastVisible);
-        }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load jobs');
-      } finally {
-        setLoading(false);
-      }
-    },
-    [filters, setJobs, appendJobs, setLoading]
-  );
+  const fetchJobs = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await jobService.getPublishedJobs(filters, 20);
+      setJobs(result.jobs, null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load jobs');
+    } finally {
+      setLoading(false);
+    }
+  }, [filters, setJobs, setLoading]);
 
   useEffect(() => {
     const fetchFeatured = async () => {
@@ -53,14 +43,14 @@ export function JobsPage() {
   }, [setFeaturedJobs]);
 
   useEffect(() => {
-    fetchJobs(true);
+    fetchJobs();
   }, [fetchJobs]);
 
   if (error) {
     return (
       <PageTransition>
         <div className="mx-auto max-w-7xl px-4 py-8">
-          <ErrorState title="Error loading jobs" message={error} onRetry={() => fetchJobs(true)} />
+          <ErrorState title="Error loading jobs" message={error} onRetry={fetchJobs} />
         </div>
       </PageTransition>
     );
@@ -89,7 +79,9 @@ export function JobsPage() {
 
         {loading && jobs.length === 0 ? (
           <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {[...Array(6)].map((_, i) => <JobCardSkeleton key={i} />)}
+            {[...Array(6)].map((_, i) => (
+              <JobCardSkeleton key={i} />
+            ))}
           </div>
         ) : !loading && jobs.length === 0 ? (
           <EmptyState title="No jobs found" description="Try adjusting your filters." />
@@ -98,17 +90,6 @@ export function JobsPage() {
             {jobs.map((job) => (
               <JobCard key={job.id} job={job} />
             ))}
-          </div>
-        )}
-
-        {lastVisible && !loading && (
-          <div className="mt-6 text-center">
-            <button
-              onClick={() => fetchJobs(false)}
-              className="text-primary-600 hover:text-primary-800"
-            >
-              Load More
-            </button>
           </div>
         )}
       </div>
