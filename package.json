@@ -21,6 +21,7 @@
     "@tanstack/react-query": "^5.32.0",
     "@types/node": "^20.11.30",
     "firebase": "^10.11.0",
+    "firebase-admin": "^12.0.0",
     "framer-motion": "^11.1.7",
     "immer": "^10.0.4",
     "mammoth": "^1.6.0",
