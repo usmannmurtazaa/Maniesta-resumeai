@@ -10,8 +10,14 @@ import { useToast } from '@/contexts/ToastContext';
 import { printResume } from '@/services/pdf/printUtils';
 import EditorPanel from '@/components/builder/EditorPanel';
 import PreviewPanel from '@/components/builder/PreviewPanel';
-import { SaveIcon, PrinterIcon } from '@/components/ui/icons';
+import { BackButton } from '@/components/common/BackButton';
+import { Button } from '@/components/ui/Button';
+import { Select } from '@/components/ui/Select';
+import { Badge } from '@/components/ui/Badge';
+import { SaveIcon, PrinterIcon, ArrowLeftIcon, ATSIcon } from '@/components/ui/icons';
 import { emptyResumeContent, DEFAULT_SECTION_ORDER, defaultDesignSettings } from '@/utils/resumeDefaults';
+
+const TEMPLATES = ['modern', 'classic', 'creative', 'tech', 'elegant'];
 
 export default function BuilderPage() {
   const { resumeId } = useParams<{ resumeId?: string }>();
@@ -25,15 +31,13 @@ export default function BuilderPage() {
   // Initialize resume immediately (no Firestore read for new resume)
   useEffect(() => {
     if (resumeId) {
-      // Load existing resume from Firestore
       resumeService.getResume(resumeId).then((resume) => {
         if (resume) setResume(resume);
       });
     } else {
-      // Create empty resume locally, no database call
       const newResume: any = {
         id: '',
-        userId: '', // will be set on first save
+        userId: '',
         title: 'Untitled Resume',
         templateId: 'modern',
         content: emptyResumeContent(),
@@ -71,7 +75,7 @@ export default function BuilderPage() {
         setDirty(true);
       }
     }
-   }, [currentResume, setResume, setDirty]);
+  }, [currentResume, setResume, setDirty]);
 
   const handleSave = async (data: any) => {
     if (!currentResume) return;
@@ -97,28 +101,89 @@ export default function BuilderPage() {
     }
   }, [currentResume, isDirty, save]);
 
+  const handleTemplateChange = (templateId: string) => {
+    if (currentResume) {
+      const updated = { ...currentResume, templateId };
+      setResume(updated);
+      setDirty(true);
+    }
+  };
+
   if (!currentResume) {
-    return <div className="p-8">Loading...</div>;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary-600 border-t-transparent" />
+      </div>
+    );
   }
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      {/* Editor Panel */}
-      <div
-        className={`editor-panel w-full md:w-1/2 lg:w-2/5 border-r border-gray-200 overflow-y-auto bg-white ${
-          isMobilePreviewOpen ? 'hidden md:block' : 'block'
-        }`}
-      >
-        <EditorPanel />
+    <div className="flex h-screen flex-col overflow-hidden bg-gradient-to-br from-gray-50 via-white to-gray-100">
+      {/* Builder Header */}
+      <header className="border-b border-white/40 bg-white/70 backdrop-blur-xl">
+        <div className="flex items-center justify-between px-4 py-3 sm:px-6">
+          <div className="flex items-center gap-2">
+            <BackButton label="My Resumes" to="/dashboard" />
+            <h1 className="hidden md:block text-lg font-semibold text-gray-900">
+              {currentResume.title || 'Untitled Resume'}
+            </h1>
+          </div>
+
+          <div className="flex items-center gap-2 sm:gap-3">
+            {currentResume.atsScore !== null && currentResume.atsScore !== undefined && (
+              <Badge variant="accent" className="hidden sm:inline-flex">
+                <ATSIcon size={14} className="mr-1" />
+                ATS: {currentResume.atsScore}
+              </Badge>
+            )}
+
+            <Select
+              value={currentResume.templateId}
+              onChange={(e) => handleTemplateChange(e.target.value)}
+              className="w-36"
+              aria-label="Select template"
+            >
+              {TEMPLATES.map((t) => (
+                <option key={t} value={t}>
+                  {t.charAt(0).toUpperCase() + t.slice(1)}
+                </option>
+              ))}
+            </Select>
+
+            <Button variant="outline" size="sm" onClick={printResume} className="hidden sm:inline-flex">
+              <PrinterIcon size={16} className="mr-1" />
+              Print
+            </Button>
+
+            <Button size="sm" onClick={flush} disabled={!isDirty}>
+              <SaveIcon size={16} className="mr-1" />
+              Save
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {/* Main builder area */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Editor Panel */}
+        <div
+          className={`editor-panel w-full md:w-1/2 lg:w-2/5 border-r border-gray-200 overflow-y-auto bg-white ${
+            isMobilePreviewOpen ? 'hidden md:block' : 'block'
+          }`}
+        >
+          <EditorPanel />
+        </div>
+
+        {/* Preview Panel */}
+        <div
+          className={`preview-panel w-full md:w-1/2 lg:w-3/5 bg-gray-100 overflow-y-auto p-6 ${
+            isMobilePreviewOpen ? 'block' : 'hidden md:block'
+          }`}
+        >
+          <PreviewPanel />
+        </div>
       </div>
-      {/* Preview Panel */}
-      <div
-        className={`preview-panel w-full md:w-1/2 lg:w-3/5 bg-gray-100 overflow-y-auto p-6 ${
-          isMobilePreviewOpen ? 'block' : 'hidden md:block'
-        }`}
-      >
-        <PreviewPanel />
-      </div>
+
       {/* Mobile toggle button */}
       <button
         onClick={toggleMobilePreview}
@@ -126,22 +191,6 @@ export default function BuilderPage() {
         aria-label="Toggle preview"
       >
         {isMobilePreviewOpen ? 'Edit' : 'Preview'}
-      </button>
-      {/* Manual save button */}
-      <button
-        onClick={flush}
-        className="fixed bottom-4 left-4 z-50 rounded-full bg-green-600 p-4 text-white shadow-lg md:hidden"
-        aria-label="Save now"
-      >
-        <SaveIcon size={20} />
-      </button>
-      {/* Print button */}
-      <button
-        onClick={printResume}
-        className="fixed bottom-4 left-24 z-50 rounded-full bg-blue-600 p-4 text-white shadow-lg md:hidden"
-        aria-label="Print resume"
-      >
-        <PrinterIcon size={20} />
       </button>
     </div>
   );

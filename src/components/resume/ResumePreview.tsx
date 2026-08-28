@@ -9,7 +9,7 @@ export function ResumePreview({ resume }: { resume: Resume }) {
     inter: 'font-sans',
     serif: 'font-serif',
     mono: 'font-mono',
-    lato: 'font-sans', // assume default
+    lato: 'font-sans',
     montserrat: 'font-sans',
   }[designSettings.fontFamily] || 'font-sans';
 
@@ -26,10 +26,13 @@ export function ResumePreview({ resume }: { resume: Resume }) {
   }[designSettings.spacing] || 'space-y-4';
 
   return (
-    <div className={`bg-white p-8 max-w-4xl mx-auto ${fontClass} ${fontSizeClass} ${spacingClass}`} style={{ color: designSettings.color }}>
+    <div
+      className={`bg-white p-8 max-w-4xl mx-auto ${fontClass} ${fontSizeClass} ${spacingClass} print-area`}
+      style={{ color: designSettings.color }}
+    >
       {/* Header */}
-      <header className="text-center mb-6">
-        <h1 className="text-3xl font-bold">{content.personalInfo.fullName}</h1>
+      <header className="text-center mb-8">
+        <h1 className="text-3xl font-bold tracking-tight">{content.personalInfo.fullName}</h1>
         {content.personalInfo.title && <p className="text-gray-600">{content.personalInfo.title}</p>}
         <div className="flex flex-wrap justify-center gap-x-4 text-sm mt-2">
           {content.personalInfo.email && <span>{content.personalInfo.email}</span>}
@@ -40,16 +43,17 @@ export function ResumePreview({ resume }: { resume: Resume }) {
         </div>
       </header>
 
+      {/* All sections */}
       {content.summary && (
         <section>
-          <h2 className="text-xl font-semibold border-b mb-2">Summary</h2>
+          <h2 className="text-lg font-semibold border-b mb-2 pb-1">Summary</h2>
           <p className="whitespace-pre-wrap">{content.summary}</p>
         </section>
       )}
 
       {content.experience.length > 0 && (
         <section>
-          <h2 className="text-xl font-semibold border-b mb-2">Experience</h2>
+          <h2 className="text-lg font-semibold border-b mb-2 pb-1">Experience</h2>
           <div className="space-y-4">
             {content.experience.map((exp) => (
               <div key={exp.id}>
@@ -74,15 +78,13 @@ export function ResumePreview({ resume }: { resume: Resume }) {
 
       {content.education.length > 0 && (
         <section>
-          <h2 className="text-xl font-semibold border-b mb-2">Education</h2>
+          <h2 className="text-lg font-semibold border-b mb-2 pb-1">Education</h2>
           <div className="space-y-4">
             {content.education.map((edu) => (
               <div key={edu.id}>
                 <h3 className="font-medium">{edu.degree} - {edu.institution}</h3>
                 {edu.field && <p className="text-sm text-gray-600">{edu.field}</p>}
-                <span className="text-sm text-gray-500">
-                  {edu.startDate} - {edu.endDate}
-                </span>
+                <span className="text-sm text-gray-500">{edu.startDate} - {edu.endDate}</span>
                 {edu.description && <p className="mt-1 whitespace-pre-wrap">{edu.description}</p>}
               </div>
             ))}
@@ -92,7 +94,7 @@ export function ResumePreview({ resume }: { resume: Resume }) {
 
       {content.skills.length > 0 && (
         <section>
-          <h2 className="text-xl font-semibold border-b mb-2">Skills</h2>
+          <h2 className="text-lg font-semibold border-b mb-2 pb-1">Skills</h2>
           <div className="space-y-2">
             {content.skills.map((skillCat) => (
               <div key={skillCat.id}>
@@ -110,7 +112,7 @@ export function ResumePreview({ resume }: { resume: Resume }) {
 
       {content.projects.length > 0 && (
         <section>
-          <h2 className="text-xl font-semibold border-b mb-2">Projects</h2>
+          <h2 className="text-lg font-semibold border-b mb-2 pb-1">Projects</h2>
           <div className="space-y-4">
             {content.projects.map((proj) => (
               <div key={proj.id}>
@@ -133,7 +135,7 @@ export function ResumePreview({ resume }: { resume: Resume }) {
 
       {content.certifications.length > 0 && (
         <section>
-          <h2 className="text-xl font-semibold border-b mb-2">Certifications</h2>
+          <h2 className="text-lg font-semibold border-b mb-2 pb-1">Certifications</h2>
           <div className="space-y-2">
             {content.certifications.map((cert) => (
               <div key={cert.id}>
@@ -148,7 +150,7 @@ export function ResumePreview({ resume }: { resume: Resume }) {
 
       {content.languages.length > 0 && (
         <section>
-          <h2 className="text-xl font-semibold border-b mb-2">Languages</h2>
+          <h2 className="text-lg font-semibold border-b mb-2 pb-1">Languages</h2>
           <ul className="list-disc pl-5">
             {content.languages.map((lang) => (
               <li key={lang.id}>{lang.name} {lang.proficiency && `(${lang.proficiency})`}</li>
@@ -159,7 +161,7 @@ export function ResumePreview({ resume }: { resume: Resume }) {
 
       {content.awards.length > 0 && (
         <section>
-          <h2 className="text-xl font-semibold border-b mb-2">Awards</h2>
+          <h2 className="text-lg font-semibold border-b mb-2 pb-1">Awards</h2>
           <div className="space-y-2">
             {content.awards.map((award) => (
               <div key={award.id}>
@@ -174,7 +176,7 @@ export function ResumePreview({ resume }: { resume: Resume }) {
 
       {content.volunteer.length > 0 && (
         <section>
-          <h2 className="text-xl font-semibold border-b mb-2">Volunteer Experience</h2>
+          <h2 className="text-lg font-semibold border-b mb-2 pb-1">Volunteer Experience</h2>
           <div className="space-y-4">
             {content.volunteer.map((vol) => (
               <div key={vol.id}>
@@ -189,7 +191,7 @@ export function ResumePreview({ resume }: { resume: Resume }) {
 
       {content.customSections.map((section) => (
         <section key={section.id}>
-          <h2 className="text-xl font-semibold border-b mb-2">{section.title}</h2>
+          <h2 className="text-lg font-semibold border-b mb-2 pb-1">{section.title}</h2>
           <div className="space-y-4">
             {section.entries.map((entry) => (
               <div key={entry.id}>

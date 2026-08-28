@@ -3,7 +3,6 @@ import { useToast } from '@/contexts/ToastContext';
 import { resumeService } from '@/services/firebase/firestore';
 import type { Resume } from '@/types/resume.types';
 import { Card } from '@/components/ui/Card';
-import { Button } from '@/components/ui/Button';
 import { EditIcon, TrashIcon, CopyIcon } from '@/components/ui/icons';
 import { formatDate } from '@/utils/dateUtils';
 
@@ -27,7 +26,7 @@ export function ResumeCard({ resume, onDelete }: ResumeCardProps) {
   };
 
   return (
-    <Card className="p-4 hover:shadow-md transition-shadow">
+    <Card className="relative p-4 hover:shadow-lg transition-shadow">
       <div className="flex items-start justify-between">
         <div>
           <h3 className="font-medium text-gray-900">{resume.title}</h3>

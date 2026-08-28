@@ -280,23 +280,29 @@ export const CheckCircleIcon: React.FC<IconProps> = ({ size, ...props }) => (
   </svg>
 );
 
-export const GoogleIcon: React.FC<IconProps> = ({ size, ...props }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
+export const GoogleIcon: React.FC<IconProps> = ({ size = 24, ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 48 48"
+    width={size}
+    height={size}
+    {...props}
+  >
     <path
-      d="M21.35 11.1h-9.17v2.73h6.51c-.33 2.81-2.5 5.44-6.5 5.44C7.36 19.27 4 16.25 4 12s3.36-7.27 7.69-7.27c2.25 0 3.85.91 5.05 2.09l2.06-2.06C16.85 2.56 14.65 1.5 11.69 1.5 5.14 1.5 0 5.64 0 12s5.14 10.5 11.69 10.5c5.91 0 10.31-4.15 10.31-10.07 0-.66-.06-1.32-.18-1.93z"
-      fill="#4285F4"
+      fill="#FFC107"
+      d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
     />
     <path
-      d="M2.5 5.5l3.5 2.5C7.5 5.5 9.5 4 12 4c1.5 0 2.7.5 3.7 1.4L18 3.5C16.4 2.2 14.3 1.5 12 1.5 7.6 1.5 3.8 4.5 2.5 5.5z"
-      fill="#EA4335"
+      fill="#FF3D00"
+      d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
     />
     <path
-      d="M12 23c2.5 0 4.6-.9 6.2-2.4l-3.5-2.7c-1 .7-2.3 1.1-3.7 1.1-3 0-5.5-2-6.4-4.7l-3.6 2.8c1.4 3.5 4.9 5.9 9 5.9z"
-      fill="#34A853"
+      fill="#4CAF50"
+      d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
     />
     <path
-      d="M21.8 12.2c.1-.6.2-1.2.2-1.9 0-.9-.1-1.7-.2-2.5H12v4.7h6.8c-.3 1.2-1 2.2-2.1 2.9l3.5 2.7c1.8-1.7 2.9-4.1 2.9-6.9z"
-      fill="#4285F4"
+      fill="#1976D2"
+      d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
     />
   </svg>
 );
@@ -313,5 +319,38 @@ export const TemplateIcon: React.FC<IconProps> = ({ size, ...props }) => (
     <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
     <line x1="3" y1="9" x2="21" y2="9" />
     <line x1="9" y1="21" x2="9" y2="9" />
+  </svg>
+);
+
+export const PaletteIcon: React.FC<IconProps> = ({ size, ...props }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" />
+    <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" />
+    <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" />
+    <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" />
+    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 011.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" />
+  </svg>
+);
+
+export const TypeIcon: React.FC<IconProps> = ({ size, ...props }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <polyline points="4 7 4 4 20 4 20 7" />
+    <line x1="9" y1="20" x2="15" y2="20" />
+    <line x1="12" y1="4" x2="12" y2="20" />
+  </svg>
+);
+
+export const AlignLeftIcon: React.FC<IconProps> = ({ size, ...props }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <line x1="17" y1="10" x2="3" y2="10" />
+    <line x1="21" y1="6" x2="3" y2="6" />
+    <line x1="21" y1="14" x2="3" y2="14" />
+    <line x1="17" y1="18" x2="3" y2="18" />
+  </svg>
+);
+
+export const DropletIcon: React.FC<IconProps> = ({ size, ...props }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
   </svg>
 );

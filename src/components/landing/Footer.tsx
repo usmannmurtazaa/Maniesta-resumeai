@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Logo } from '@/components/common/Logo';
-import { ArrowRightIcon, MailIcon } from '@/components/ui/icons';
+import { MailIcon, ExternalLinkIcon } from '@/components/ui/icons';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -69,10 +69,17 @@ export function Footer() {
 
         <div className="mt-10 border-t border-white/40 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-gray-500">© {currentYear} Maniesta ResumeAI. All rights reserved.</p>
-          <a href="mailto:support@maniesta.com" className="flex items-center gap-2 text-sm text-gray-500 hover:text-primary-600 transition-colors">
-            <MailIcon size={16} />
-            support@maniesta.com
-          </a>
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <a
+              href="https://usmanmurtaza.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm font-medium text-primary-600 hover:text-primary-500 transition-colors"
+            >
+              Built by Usman Murtaza
+              <ExternalLinkIcon size={14} />
+            </a>
+          </div>
         </div>
       </div>
     </footer>

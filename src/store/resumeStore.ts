@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import { Resume, ResumeContent, DesignSettings } from '@/types/resume.types';
+import type { Resume, ResumeContent, DesignSettings } from '@/types/resume.types';
 
 interface ResumeState {
   currentResume: Resume | null;
