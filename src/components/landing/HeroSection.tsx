@@ -99,7 +99,7 @@ export function HeroSection() {
                   <span className="text-sm font-medium">AI Suggestion</span>
                 </div>
                 <p className="mt-2 text-xs text-gray-600">
-                  "Increased team productivity by 30%"
+                  &quot;Increased team productivity by 30%&quot;
                 </p>
               </div>
             </div>

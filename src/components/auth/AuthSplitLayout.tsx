@@ -53,7 +53,7 @@ export function AuthSplitLayout({ children, visualType }: AuthSplitLayoutProps) 
         </div>
         <div className="absolute -left-6 bottom-1/4 w-48 glass-card rounded-2xl p-4 text-gray-900 shadow-glass backdrop-blur-lg">
           <p className="text-sm font-semibold">AI Suggestion</p>
-          <p className="text-xs text-gray-600">"Increased team productivity by 30%"</p>
+          <p className="text-xs text-gray-600">&quot;Increased team productivity by 30%&quot;</p>
         </div>
       </div>
 
