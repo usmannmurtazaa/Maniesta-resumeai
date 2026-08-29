@@ -7,14 +7,21 @@ export const handler: Handler = async (event) => {
   if (error) return error;
 
   const snapshot = await db.collection('jobs').get();
-  const jobs = snapshot.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data(),
-    publishedAt: doc.data().publishedAt?.toDate?.() || null,
-    scheduledAt: doc.data().scheduledAt?.toDate?.() || null,
-    deadline: doc.data().deadline?.toDate?.() || null,
-    createdAt: doc.data().createdAt?.toDate?.() || null,
-    updatedAt: doc.data().updatedAt?.toDate?.() || null,
-  }));
-  return { statusCode: 200, body: JSON.stringify(jobs) };
+  const jobs = snapshot.docs.map((doc: any) => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      ...data,
+      publishedAt: data.publishedAt?.toDate?.() || null,
+      scheduledAt: data.scheduledAt?.toDate?.() || null,
+      deadline: data.deadline?.toDate?.() || null,
+      createdAt: data.createdAt?.toDate?.() || null,
+      updatedAt: data.updatedAt?.toDate?.() || null,
+    };
+  });
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(jobs),
+  };
 };

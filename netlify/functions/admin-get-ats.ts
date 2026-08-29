@@ -8,16 +8,16 @@ export const handler: Handler = async (event) => {
 
   const params = event.queryStringParameters || {};
   const limit = parseInt(params.limit || '20');
-  const startAfter = params.startAfter ? JSON.parse(params.startAfter) : null;
+  const startAfter = params.startAfter || null;
   const userId = params.userId;
 
-  let query: FirebaseFirestore.Query = db.collection('atsAnalyses');
+  let query: any = db.collection('atsAnalyses');
   if (userId) query = query.where('userId', '==', userId);
   if (startAfter) query = query.startAfter(startAfter);
-  query = query.orderBy('createdAt', 'desc').limit(limit);
+  query = query.limit(limit);
 
   const snapshot = await query.get();
-  const analyses = snapshot.docs.map(doc => {
+  const analyses = snapshot.docs.map((doc: any) => {
     const data = doc.data();
     return {
       id: doc.id,
@@ -34,6 +34,9 @@ export const handler: Handler = async (event) => {
     };
   });
 
-  const lastVisible = snapshot.docs.length > 0 ? snapshot.docs[snapshot.docs.length - 1] : null;
-  return { statusCode: 200, body: JSON.stringify({ analyses, lastVisible: lastVisible ? lastVisible.id : null }) };
+  const lastVisible = snapshot.docs.length > 0 ? snapshot.docs[snapshot.docs.length - 1].id : null;
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ analyses, lastVisible }),
+  };
 };

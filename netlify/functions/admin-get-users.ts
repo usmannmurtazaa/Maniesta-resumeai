@@ -1,6 +1,6 @@
 import { Handler } from '@netlify/functions';
-import * as admin from 'firebase-admin';
 import { verifyAdminToken } from './_shared/adminAuth';
+import { db } from './_shared/firebaseAdmin';
 
 export const handler: Handler = async (event) => {
   const { error } = await verifyAdminToken(event);
@@ -8,12 +8,12 @@ export const handler: Handler = async (event) => {
 
   const params = event.queryStringParameters || {};
   const limit = parseInt(params.limit || '20');
-  const startAfter = params.startAfter ? JSON.parse(params.startAfter) : null;
+  const startAfter = params.startAfter ? params.startAfter : null;
   const search = params.search?.toLowerCase();
   const status = params.status;
   const adminFilter = params.admin;
 
-  let query: any = admin.firestore().collection('users');
+  let query: any = db.collection('users');
   if (status === 'active') query = query.where('disabled', '==', false);
   if (status === 'disabled') query = query.where('disabled', '==', true);
   if (adminFilter === 'true') query = query.where('admin', '==', true);
@@ -42,12 +42,12 @@ export const handler: Handler = async (event) => {
     });
   });
 
-  const lastVisible = snapshot.docs.length > 0 ? snapshot.docs[snapshot.docs.length - 1] : null;
+  const lastVisible = snapshot.docs.length > 0 ? snapshot.docs[snapshot.docs.length - 1].id : null;
   return {
     statusCode: 200,
     body: JSON.stringify({
       users,
-      lastVisible: lastVisible ? lastVisible.data() : null,
+      lastVisible,
     }),
   };
 };

@@ -1,14 +1,14 @@
 import * as admin from 'firebase-admin';
 
 if (!process.env.FIREBASE_SERVICE_ACCOUNT) {
-  throw new Error('FIREBASE_SERVICE_ACCOUNT environment variable is not set');
+  throw new Error('FIREBASE_SERVICE_ACCOUNT is not set');
 }
 
 let serviceAccount;
 try {
   serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 } catch (error) {
-  throw new Error('FIREBASE_SERVICE_ACCOUNT contains invalid JSON');
+  throw new Error('FIREBASE_SERVICE_ACCOUNT is not valid JSON');
 }
 
 if (!admin.apps.length) {
