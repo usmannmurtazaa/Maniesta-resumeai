@@ -16,7 +16,8 @@ out/
 .env.test.local
 .env.production.local
 .env.*.local
-FIREBASE_SERVICE_ACCOUNT.json
+serviceAccountKey.json
+setAdmin.cjs
 
 # Logs
 logs/
