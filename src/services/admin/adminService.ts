@@ -1,66 +1,278 @@
-import { auth } from '@/services/firebase/config';
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  limit,
+} from 'firebase/firestore';
+import { db } from '@/services/firebase/config';
 import type { AdminUser, AdminResume, AdminATS, AdminAnalytics, AdminSearchResult } from '@/types/admin.types';
 import type { Job } from '@/types/job.types';
 
-const BASE_URL = '/.netlify/functions';
-
-async function getToken(): Promise<string> {
-  const user = auth.currentUser;
-  if (!user) throw new Error('Not authenticated');
-  return user.getIdToken();
-}
-
-async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
-  try {
-    const response = await fetch(`${BASE_URL}${path}`, {
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${await getToken()}`,
-        ...options.headers,
-      },
-    });
-    if (!response.ok) {
-      console.warn(`Admin request failed: ${path}`, response.status);
-      return {} as T;
-    }
-    return response.json();
-  } catch (error) {
-    console.error('Admin service error:', error);
-    return {} as T;
-  }
+// Helper to convert Firestore Timestamp to Date
+function toDate(value: any): Date | null {
+  if (!value) return null;
+  return value.toDate ? value.toDate() : new Date(value);
 }
 
 export const adminService = {
-  getUsers: (filters?: { search?: string; status?: string; admin?: boolean; limit?: number; startAfter?: string }) =>
-    request<{ users: AdminUser[]; lastVisible: string | null }>(`/admin-get-users?${new URLSearchParams(filters as any).toString()}`),
+  async getUsers(filters?: { search?: string; status?: string; admin?: boolean; limit?: number }) {
+    let q = query(collection(db, 'users'));
+    if (filters?.limit) q = query(q, limit(filters.limit));
+    const snapshot = await getDocs(q);
+    let users = snapshot.docs.map((docSnap) => {
+      const data = docSnap.data();
+      return {
+        id: docSnap.id,
+        email: data.email,
+        displayName: data.displayName || null,
+        photoURL: data.photoURL || null,
+        createdAt: toDate(data.createdAt),
+        lastLoginAt: toDate(data.lastLoginAt),
+        disabled: data.disabled || false,
+        admin: data.admin || false,
+      } as AdminUser;
+    });
 
-  getUser: (userId: string) =>
-    request<{ user: AdminUser }>(`/admin-get-user?userId=${userId}`),
+    if (filters?.search) {
+      const s = filters.search.toLowerCase();
+      users = users.filter(
+        (u) =>
+          u.email?.toLowerCase().includes(s) ||
+          (u.displayName || '').toLowerCase().includes(s)
+      );
+    }
+    if (filters?.status === 'active') users = users.filter((u) => !u.disabled);
+    if (filters?.status === 'disabled') users = users.filter((u) => u.disabled);
+    if (filters?.admin === true) users = users.filter((u) => u.admin);
+    if (filters?.admin === false) users = users.filter((u) => !u.admin);
 
-  getUserResumes: (userId: string) =>
-    request<{ resumes: AdminResume[] }>(`/admin-get-resumes?userId=${userId}`),
+    return { users, lastVisible: null };
+  },
 
-  getATSAnalyses: (filters?: { userId?: string; limit?: number; startAfter?: string }) =>
-    request<{ analyses: AdminATS[]; lastVisible: string | null }>(`/admin-get-ats?${new URLSearchParams(filters as any).toString()}`),
+  async getUser(userId: string) {
+    const docRef = doc(db, 'users', userId);
+    const snap = await getDoc(docRef);
+    if (!snap.exists()) throw new Error('User not found');
+    const data = snap.data();
+    const user: AdminUser = {
+      id: userId,
+      email: data.email,
+      displayName: data.displayName || null,
+      photoURL: data.photoURL || null,
+      createdAt: toDate(data.createdAt),
+      lastLoginAt: toDate(data.lastLoginAt),
+      disabled: data.disabled || false,
+      admin: data.admin || false,
+    };
+    return { user };
+  },
 
-  getAnalytics: () =>
-    request<AdminAnalytics>(`/admin-get-analytics`),
+  async getUserResumes(userId: string) {
+    const q = query(collection(db, 'resumes'), where('userId', '==', userId));
+    const snapshot = await getDocs(q);
+    const resumes = snapshot.docs.map((docSnap) => {
+      const data = docSnap.data();
+      return {
+        id: docSnap.id,
+        userId: data.userId,
+        title: data.title,
+        templateId: data.templateId,
+        atsScore: data.atsScore ?? null,
+        jobDescriptionAttached: !!data.jobDescription,
+        createdAt: toDate(data.createdAt),
+        updatedAt: toDate(data.updatedAt),
+      } as AdminResume;
+    });
+    return { resumes };
+  },
 
-  search: (query: string) =>
-    request<AdminSearchResult[]>(`/admin-search?query=${encodeURIComponent(query)}`),
+  async getAllResumes() {
+    const snapshot = await getDocs(collection(db, 'resumes'));
+    const resumes = snapshot.docs.map((docSnap) => {
+      const data = docSnap.data();
+      return {
+        id: docSnap.id,
+        userId: data.userId,
+        title: data.title,
+        templateId: data.templateId,
+        atsScore: data.atsScore ?? null,
+        jobDescriptionAttached: !!data.jobDescription,
+        createdAt: toDate(data.createdAt),
+        updatedAt: toDate(data.updatedAt),
+      } as AdminResume;
+    });
+    return { resumes };
+  },
 
-  updateUserStatus: (userId: string, disabled: boolean) =>
-    request<{ success: boolean }>(`/admin-update-user`, { method: 'PUT', body: JSON.stringify({ userId, disabled }) }),
+  async getATSAnalyses(filters?: { userId?: string; limit?: number }) {
+    let q = query(collection(db, 'atsAnalyses'));
+    if (filters?.userId) q = query(q, where('userId', '==', filters.userId));
+    if (filters?.limit) q = query(q, limit(filters.limit));
+    const snapshot = await getDocs(q);
+    const analyses = snapshot.docs.map((docSnap) => {
+      const data = docSnap.data();
+      return {
+        id: docSnap.id,
+        userId: data.userId,
+        resumeId: data.resumeId,
+        jobId: data.jobId || null,
+        score: data.score,
+        jobMatchScore: data.jobMatchScore ?? null,
+        matchedKeywords: data.matchedKeywords || [],
+        missingKeywords: data.missingKeywords || [],
+        recommendations: data.recommendations || [],
+        warnings: data.warnings || [],
+        createdAt: toDate(data.createdAt),
+      } as AdminATS;
+    });
+    return { analyses, lastVisible: null };
+  },
 
-  createJob: (jobData: Omit<Job, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>) =>
-    request<{ id: string }>(`/admin-create-job`, { method: 'POST', body: JSON.stringify(jobData) }),
+  async getAnalytics(): Promise<AdminAnalytics> {
+    const [usersSnapshot, resumesSnapshot, atsSnapshot, jobsSnapshot] = await Promise.all([
+      getDocs(collection(db, 'users')),
+      getDocs(collection(db, 'resumes')),
+      getDocs(collection(db, 'atsAnalyses')),
+      getDocs(collection(db, 'jobs')),
+    ]);
 
-  updateJob: (jobId: string, jobData: Partial<Job>) =>
-    request<{ success: boolean }>(`/admin-update-job`, { method: 'PUT', body: JSON.stringify({ jobId, ...jobData }) }),
+    const users = usersSnapshot.docs;
+    const resumes = resumesSnapshot.docs;
+    const ats = atsSnapshot.docs;
+    const jobs = jobsSnapshot.docs;
 
-  deleteJob: (jobId: string) =>
-    request<{ success: boolean }>(`/admin-delete-job`, { method: 'DELETE', body: JSON.stringify({ jobId }) }),
+    const now = new Date();
+    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay());
+    startOfWeek.setHours(0, 0, 0, 0);
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-  getJobs: () => request<Job[]>('/admin-get-jobs'),
+    const countSince = (docs: any[], date: Date) =>
+      docs.filter((d) => (toDate(d.data().createdAt) || new Date(0)) >= date).length;
+
+    const averageScore =
+      ats.length > 0
+        ? Math.round(ats.reduce((acc, d) => acc + (d.data().score || 0), 0) / ats.length)
+        : 0;
+
+    return {
+      users: {
+        total: users.length,
+        newToday: countSince(users, startOfDay),
+        newThisWeek: countSince(users, startOfWeek),
+        newThisMonth: countSince(users, startOfMonth),
+        activeUsers: users.filter((d) => !d.data().disabled).length,
+      },
+      resumes: {
+        total: resumes.length,
+        createdToday: countSince(resumes, startOfDay),
+        createdThisWeek: countSince(resumes, startOfWeek),
+        createdThisMonth: countSince(resumes, startOfMonth),
+      },
+      ats: {
+        totalAnalyses: ats.length,
+        averageScore,
+        analysesToday: countSince(ats, startOfDay),
+        analysesThisWeek: countSince(ats, startOfWeek),
+        analysesThisMonth: countSince(ats, startOfMonth),
+        jobMatches: ats.filter((d) => d.data().jobId).length,
+      },
+      jobs: {
+        total: jobs.length,
+        published: jobs.filter((d) => d.data().status === 'published').length,
+        scheduled: jobs.filter((d) => d.data().status === 'scheduled').length,
+        featured: jobs.filter((d) => d.data().featured).length,
+        savedByUsers: 0,
+      },
+    };
+  },
+
+  async getJobs(): Promise<Job[]> {
+    const snapshot = await getDocs(collection(db, 'jobs'));
+    return snapshot.docs.map((docSnap) => {
+      const data = docSnap.data();
+      return {
+        id: docSnap.id,
+        ...data,
+        publishedAt: toDate(data.publishedAt),
+        scheduledAt: toDate(data.scheduledAt),
+        deadline: toDate(data.deadline),
+        createdAt: toDate(data.createdAt),
+        updatedAt: toDate(data.updatedAt),
+      } as Job;
+    });
+  },
+
+  async search(queryText: string): Promise<AdminSearchResult[]> {
+    const results: AdminSearchResult[] = [];
+    const q = queryText.toLowerCase();
+
+    const usersSnap = await getDocs(collection(db, 'users'));
+    usersSnap.forEach((docSnap) => {
+      const data = docSnap.data();
+      const name = (data.displayName || '').toLowerCase();
+      const email = (data.email || '').toLowerCase();
+      if (name.includes(q) || email.includes(q)) {
+        results.push({ type: 'user', id: docSnap.id, title: data.displayName || data.email, subtitle: data.email });
+      }
+    });
+
+    const resumesSnap = await getDocs(collection(db, 'resumes'));
+    resumesSnap.forEach((docSnap) => {
+      const data = docSnap.data();
+      if (data.title?.toLowerCase().includes(q)) {
+        results.push({ type: 'resume', id: docSnap.id, title: data.title, subtitle: 'Resume' });
+      }
+    });
+
+    const jobsSnap = await getDocs(collection(db, 'jobs'));
+    jobsSnap.forEach((docSnap) => {
+      const data = docSnap.data();
+      if (
+        data.title?.toLowerCase().includes(q) ||
+        data.companyName?.toLowerCase().includes(q)
+      ) {
+        results.push({ type: 'job', id: docSnap.id, title: data.title, subtitle: data.companyName });
+      }
+    });
+
+    return results;
+  },
+
+  // Write operations still require server-side admin checks.
+  // For now, they call the existing Netlify functions.
+  async createJob(jobData: any) {
+    const response = await fetch('/.netlify/functions/admin-create-job', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(jobData),
+    });
+    if (!response.ok) throw new Error(await response.text());
+    return response.json();
+  },
+
+  async updateJob(jobId: string, jobData: any) {
+    const response = await fetch('/.netlify/functions/admin-update-job', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ jobId, ...jobData }),
+    });
+    if (!response.ok) throw new Error(await response.text());
+    return response.json();
+  },
+
+  async deleteJob(jobId: string) {
+    const response = await fetch('/.netlify/functions/admin-delete-job', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ jobId }),
+    });
+    if (!response.ok) throw new Error(await response.text());
+    return response.json();
+  },
 };
