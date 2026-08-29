@@ -3,7 +3,7 @@ export interface AdminUser {
   email: string;
   displayName: string | null;
   photoURL: string | null;
-  createdAt: Date;
+  createdAt: Date | null;
   lastLoginAt: Date | null;
   disabled: boolean;
   admin: boolean;

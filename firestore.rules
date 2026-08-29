@@ -23,7 +23,7 @@ service cloud.firestore {
 
     // Resumes collection
     match /resumes/{resumeId} {
-      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
       allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
       allow update: if isSignedIn() && resource.data.userId == request.auth.uid &&
         request.resource.data.userId == request.auth.uid; // no transfer of ownership
@@ -40,7 +40,7 @@ service cloud.firestore {
 
     // Notifications collection
     match /notifications/{notificationId} {
-      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
       // Only server-side functions can create notifications
       allow create: if false;
       allow update: if isSignedIn() && resource.data.userId == request.auth.uid &&
