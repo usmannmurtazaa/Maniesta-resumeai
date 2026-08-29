@@ -18,6 +18,7 @@ out/
 .env.*.local
 serviceAccountKey.json
 setAdmin.cjs
+seedFirestore.cjs
 
 # Logs
 logs/
