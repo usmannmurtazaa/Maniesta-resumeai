@@ -31,6 +31,7 @@ import AdminATSPage from '@/pages/AdminATSPage';
 import AdminJobsPage from '@/pages/AdminJobsPage';
 import AdminNotificationsPage from '@/pages/AdminNotificationsPage';
 import AdminAnalyticsPage from '@/pages/AdminAnalyticsPage';
+import AdminSettingsPage from '@/pages/AdminSettingsPage';
 
 export const routes = [
   {
@@ -95,6 +96,7 @@ export const routes = [
       { path: 'jobs', element: <AdminJobsPage /> },
       { path: 'notifications', element: <AdminNotificationsPage /> },
       { path: 'analytics', element: <AdminAnalyticsPage /> },
+      { path: 'settings', element: <AdminSettingsPage /> },
     ],
   },
   {

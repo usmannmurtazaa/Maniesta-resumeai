@@ -30,7 +30,7 @@ export default function ForgotPasswordPage() {
     <AuthSplitLayout visualType="login">
       <form onSubmit={handleSubmit} className="space-y-5">
         <h1 className="text-3xl font-display font-bold text-gray-900">Reset Password</h1>
-        <p className="text-sm text-gray-600">Enter your email and we'll send you a reset link.</p>
+        <p className="text-sm text-gray-600">Enter your email and we&apos;ll send you a reset link.</p>
         <Input type="email" label="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         <Button type="submit" disabled={submitting} className="w-full">
           {submitting ? 'Sending...' : 'Send Reset Link'}
