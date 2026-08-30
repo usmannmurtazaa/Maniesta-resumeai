@@ -116,8 +116,6 @@ export default function ProfilePage() {
             </Card>
           </motion.div>
         </div>
-
-        <DashboardFooter />
       </div>
     </PageTransition>
   );

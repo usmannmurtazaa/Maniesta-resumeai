@@ -5,14 +5,14 @@
 [functions]
   directory = "netlify/functions"
 
+[dev]
+  command = "npm run dev"
+  port = 8080
+  targetPort = 5173
+  framework = "#custom"
+  publish = "dist"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-[dev]
-  command = "npm run dev"
-  port = 3000
-  targetPort = 8888
-  framework = "#custom"
-  publish = "dist"

@@ -23,7 +23,7 @@
     "@tanstack/react-query": "^5.32.0",
     "@types/node": "^20.11.30",
     "firebase": "^10.11.0",
-    "firebase-admin": "^12.0.0",
+    "firebase-admin": "^12.7.0",
     "framer-motion": "^11.1.7",
     "immer": "^10.0.4",
     "mammoth": "^1.6.0",
@@ -33,7 +33,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.3",
     "react-router-dom": "^6.22.3",
-    "zod": "^3.22.4",
+    "zod": "^3.25.76",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
