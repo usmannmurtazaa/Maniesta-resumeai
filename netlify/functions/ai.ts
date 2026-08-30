@@ -1,8 +1,7 @@
 import { Handler } from '@netlify/functions';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { z } from 'zod';
-import * as admin from 'firebase-admin';
-import { verifyIdToken } from './_shared/firebaseAdmin'; // we'll add this helper
+import { auth } from './_shared/firebaseAdmin';
 
 const apiKey = process.env.GEMINI_API_KEY;
 if (!apiKey) throw new Error('GEMINI_API_KEY is not set');
@@ -33,7 +32,7 @@ export const handler: Handler = async (event) => {
   }
   const token = authHeader.split('Bearer ')[1];
   try {
-    const decoded = await admin.auth().verifyIdToken(token);
+    const decoded = await auth.verifyIdToken(token);
     if (!decoded.uid) {
       return { statusCode: 401, body: JSON.stringify({ message: 'Invalid token' }) };
     }
@@ -50,17 +49,25 @@ export const handler: Handler = async (event) => {
   const { action, text, context, jobDescription } = parsed.data;
   const prompt = buildPrompt(action, text, context, jobDescription);
 
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-  const result = await model.generateContent(prompt);
-  const output = result.response.text();
+  try {
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const result = await model.generateContent(prompt);
+    const output = result.response.text();
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      suggestions: [output],
-      explanation: 'AI suggested improvement',
-    }),
-  };
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        suggestions: [output],
+        explanation: 'AI suggested improvement',
+      }),
+    };
+  } catch (error) {
+    console.error('Gemini API error:', error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ message: 'AI generation failed' }),
+    };
+  }
 };
 
 function buildPrompt(

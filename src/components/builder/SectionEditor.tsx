@@ -5,6 +5,8 @@ import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
+import { AIActionButton } from '@/components/ai/AIActionButton';
+import { AISuggestionModal } from '@/components/ai/AISuggestionModal';
 import {
   PlusIcon,
   TrashIcon,
@@ -19,8 +21,10 @@ import {
   GlobeIcon,
   TrophyIcon,
   HeartIcon,
+  SparklesIcon,
 } from '@/components/ui/icons';
 import { cn } from '@/utils/cn';
+import type { AIActionType } from '@/types/ai.types';
 
 type SectionKey =
   | 'personalInfo'
@@ -63,11 +67,73 @@ export default function SectionEditor() {
     volunteer: true,
   });
 
+  // AI modal state
+  const [aiModal, setAiModal] = useState<{
+    originalText: string;
+    action: AIActionType;
+    target: {
+      section: SectionKey;
+      field: string;
+      id?: string;
+    };
+  } | null>(null);
+
   if (!currentResume) return null;
   const content = currentResume.content;
 
   const toggleSection = (key: SectionKey) => {
     setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  // Open AI modal for a field
+  const openAIModal = (section: SectionKey, field: string, originalText: string, id?: string) => {
+    setAiModal({
+      originalText,
+      action: 'improve',
+      target: { section, field, id },
+    });
+  };
+
+  // Handle accepted AI suggestion
+  const handleAIAccept = (suggestion: string) => {
+    if (!aiModal) return;
+    const { section, field, id } = aiModal.target;
+
+    updateContent((c) => {
+      if (section === 'summary') {
+        c.summary = suggestion;
+      } else if (section === 'experience') {
+        const exp = c.experience.find((e) => e.id === id);
+        if (exp) (exp as any)[field] = suggestion;
+      } else if (section === 'projects') {
+        const proj = c.projects.find((p) => p.id === id);
+        if (proj) (proj as any)[field] = suggestion;
+      } else if (section === 'awards') {
+        const award = c.awards.find((a) => a.id === id);
+        if (award) (award as any)[field] = suggestion;
+      } else if (section === 'volunteer') {
+        const vol = c.volunteer.find((v) => v.id === id);
+        if (vol) (vol as any)[field] = suggestion;
+      } else if (section === 'education') {
+        const edu = c.education.find((e) => e.id === id);
+        if (edu) (edu as any)[field] = suggestion;
+      } else if (section === 'certifications') {
+        const cert = c.certifications.find((c) => c.id === id);
+        if (cert) (cert as any)[field] = suggestion;
+      } else if (section === 'skills') {
+        const cat = c.skills.find((s) => s.id === id);
+        if (cat && field === 'skills') {
+          cat.skills = suggestion
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean);
+        } else if (cat) {
+          (cat as any)[field] = suggestion;
+        }
+      }
+    });
+
+    setAiModal(null);
   };
 
   // Update functions (unchanged)
@@ -329,6 +395,44 @@ export default function SectionEditor() {
     </AnimatePresence>
   );
 
+  // Helper component for AI button next to textareas
+  const AIField = ({
+    value,
+    onChange,
+    onAI,
+    label,
+    rows = 4,
+    isTextarea = true,
+  }: {
+    value: string;
+    onChange: (val: string) => void;
+    onAI: () => void;
+    label: string;
+    rows?: number;
+    isTextarea?: boolean;
+  }) => (
+    <div className="relative">
+      {isTextarea ? (
+        <Textarea
+          label={label}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          rows={rows}
+        />
+      ) : (
+        <Input label={label} value={value} onChange={(e) => onChange(e.target.value)} />
+      )}
+      <button
+        onClick={onAI}
+        className="absolute right-2 top-9 text-gray-400 hover:text-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-md p-1"
+        aria-label={`AI improve ${label}`}
+        title="Improve with AI"
+      >
+        <SparklesIcon size={16} />
+      </button>
+    </div>
+  );
+
   return (
     <div className="space-y-3">
       {/* Personal Information */}
@@ -377,15 +481,16 @@ export default function SectionEditor() {
         )}
       </Card>
 
-      {/* Summary */}
+      {/* Summary with AI */}
       <Card className="overflow-hidden border-white/40 bg-white/70 backdrop-blur-md shadow-soft">
         {renderSectionHeader('summary', sectionMeta.summary.label)}
         {renderAnimatedContainer(
           'summary',
-          <Textarea
+          <AIField
             label="Professional Summary"
             value={content.summary}
-            onChange={(e) => updateSummary(e.target.value)}
+            onChange={updateSummary}
+            onAI={() => openAIModal('summary', 'summary', content.summary)}
             rows={4}
           />
         )}
@@ -438,10 +543,14 @@ export default function SectionEditor() {
                       />
                     </div>
                   </div>
-                  <Textarea
+                  <AIField
                     label="Description"
                     value={exp.description || ''}
-                    onChange={(e) => updateExperience(exp.id, 'description', e.target.value)}
+                    onChange={(val) => updateExperience(exp.id, 'description', val)}
+                    onAI={() =>
+                      openAIModal('experience', 'description', exp.description || '', exp.id)
+                    }
+                    rows={4}
                   />
                   <Button
                     variant="ghost"
@@ -509,10 +618,14 @@ export default function SectionEditor() {
                       />
                     </div>
                   </div>
-                  <Textarea
+                  <AIField
                     label="Description"
                     value={edu.description || ''}
-                    onChange={(e) => updateEducation(edu.id, 'description', e.target.value)}
+                    onChange={(val) => updateEducation(edu.id, 'description', val)}
+                    onAI={() =>
+                      openAIModal('education', 'description', edu.description || '', edu.id)
+                    }
+                    rows={3}
                   />
                   <Button
                     variant="ghost"
@@ -549,10 +662,12 @@ export default function SectionEditor() {
                     value={cat.category}
                     onChange={(e) => updateSkillCategory(cat.id, 'category', e.target.value)}
                   />
-                  <Input
+                  <AIField
                     label="Skills (comma-separated)"
                     value={cat.skills.join(', ')}
-                    onChange={(e) => updateSkillList(cat.id, e.target.value)}
+                    onChange={(val) => updateSkillList(cat.id, val)}
+                    onAI={() => openAIModal('skills', 'skills', cat.skills.join(', '), cat.id)}
+                    isTextarea={false}
                   />
                   <Button
                     variant="ghost"
@@ -596,10 +711,12 @@ export default function SectionEditor() {
                       onChange={(e) => updateProject(proj.id, 'role', e.target.value)}
                     />
                   </div>
-                  <Textarea
+                  <AIField
                     label="Description"
                     value={proj.description}
-                    onChange={(e) => updateProject(proj.id, 'description', e.target.value)}
+                    onChange={(val) => updateProject(proj.id, 'description', val)}
+                    onAI={() => openAIModal('projects', 'description', proj.description, proj.id)}
+                    rows={4}
                   />
                   <Input
                     label="Technologies (comma-separated)"
@@ -766,10 +883,14 @@ export default function SectionEditor() {
                     value={award.date || ''}
                     onChange={(e) => updateAward(award.id, 'date', e.target.value)}
                   />
-                  <Textarea
+                  <AIField
                     label="Description"
                     value={award.description || ''}
-                    onChange={(e) => updateAward(award.id, 'description', e.target.value)}
+                    onChange={(val) => updateAward(award.id, 'description', val)}
+                    onAI={() =>
+                      openAIModal('awards', 'description', award.description || '', award.id)
+                    }
+                    rows={3}
                   />
                   <Button
                     variant="ghost"
@@ -827,10 +948,14 @@ export default function SectionEditor() {
                       onChange={(e) => updateVolunteer(vol.id, 'endDate', e.target.value)}
                     />
                   </div>
-                  <Textarea
+                  <AIField
                     label="Description"
                     value={vol.description || ''}
-                    onChange={(e) => updateVolunteer(vol.id, 'description', e.target.value)}
+                    onChange={(val) => updateVolunteer(vol.id, 'description', val)}
+                    onAI={() =>
+                      openAIModal('volunteer', 'description', vol.description || '', vol.id)
+                    }
+                    rows={3}
                   />
                   <Button
                     variant="ghost"
@@ -845,6 +970,16 @@ export default function SectionEditor() {
           </div>
         )}
       </Card>
+
+      {/* AI Modal */}
+      {aiModal && (
+        <AISuggestionModal
+          originalText={aiModal.originalText}
+          action={aiModal.action}
+          onClose={() => setAiModal(null)}
+          onAccept={handleAIAccept}
+        />
+      )}
     </div>
   );
 }
