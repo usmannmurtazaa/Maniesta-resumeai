@@ -20,7 +20,12 @@ async function parseErrorResponse(response: Response): Promise<string> {
 }
 
 function validateResponse(data: any): data is AIResponse {
-  return data && Array.isArray(data.suggestions) && data.suggestions.length > 0;
+  return (
+    data &&
+    Array.isArray(data.suggestions) &&
+    data.suggestions.length > 0 &&
+    typeof data.suggestions[0] === 'string'
+  );
 }
 
 export const aiService = {
@@ -35,6 +40,7 @@ export const aiService = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Accept: 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(request),
@@ -53,7 +59,7 @@ export const aiService = {
 
       return data;
     } catch (error) {
-      if (error instanceof DOMException && error.name === 'AbortError') {
+      if (error instanceof Error && error.name === 'AbortError') {
         throw new Error('AI request timed out. Please try again.');
       }
       throw error;
