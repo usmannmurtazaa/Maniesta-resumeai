@@ -49,7 +49,16 @@ export const handler: Handler = async (event) => {
   const prompt = buildPrompt(action, text, context, jobDescription);
 
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-3.6-flash' });
+    const model = genAI.getGenerativeModel({
+      model: 'gemini-3.6-flash',
+      generationConfig: {
+        maxOutputTokens: 500,
+        temperature: 0.6,
+        topP: 0.9,
+        topK: 40,
+      },
+    });
+
     const result = await model.generateContent(prompt);
     const output = result.response.text().trim();
 
@@ -82,19 +91,17 @@ function buildPrompt(
     - Output ONLY the improved text itself. No headings, no bullet points, no explanations.`;
 
   const examples = `
-    Example:
-    Input: "Usman Murtaza"
-    Output: "Usman Murtaza is a dedicated professional focused on building high-quality solutions and delivering measurable results."
+    Example input: "Usman Murtaza"
+    Example output: "Usman Murtaza is a dedicated professional focused on building high-quality solutions and delivering measurable results."
     
-    Example:
-    Input: "Managed a team and improved sales."
-    Output: "Managed a team and improved sales performance."
+    Example input: "Managed a team and improved sales."
+    Example output: "Managed a team and improved sales performance."
   `;
 
   let prompt = '';
   switch (action) {
     case 'improve':
-      prompt = `You are Maniesta AI, a professional resume writing assistant. Improve the following text for clarity, impact, and professionalism.`;
+      prompt = `You are Maniesta AI, a professional resume writing assistant. Improve the following resume text for clarity, impact, and professionalism.`;
       break;
     case 'rewrite':
       prompt = `You are Maniesta AI, a professional resume writing assistant. Rewrite the following text to be more compelling and professional.`;
