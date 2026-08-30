@@ -4,47 +4,88 @@
 
 Built with React, TypeScript, Vite, Firebase, Netlify Functions, and Gemini AI.
 
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)  
-![License](https://img.shields.io/badge/license-MIT-blue)  
-![Version](https://img.shields.io/badge/version-1.0.0-orange)
+<div align="center">
+  <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="120" height="120" rx="24" fill="url(#gradient)"/>
+    <defs>
+      <linearGradient id="gradient" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#6366F1"/>
+        <stop offset="1" stop-color="#14B8A6"/>
+      </linearGradient>
+    </defs>
+    <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" fill="white" font-family="Poppins, sans-serif" font-size="64" font-weight="700">M</text>
+    <circle cx="94" cy="30" r="8" fill="#14B8A6" stroke="white" stroke-width="2"/>
+  </svg>
+</div>
+
+<div align="center">
+  <strong>Maniesta ResumeAI</strong><br>
+  Create. Optimize. Export.
+</div>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/build-passing-brightgreen" alt="Build passing">
+  <img src="https://img.shields.io/badge/license-MIT-blue" alt="License MIT">
+  <img src="https://img.shields.io/badge/version-1.0.0-orange" alt="Version 1.0.0">
+</p>
 
 ---
 
-## 🚀 Overview
+## Overview
 
-Maniesta ResumeAI is a production‑grade SaaS platform that helps users create, optimize, and export professional resumes. It combines an intuitive resume builder with a deterministic ATS scoring engine, AI‑powered content improvement, daily job discovery, and a complete admin dashboard.
+Maniesta ResumeAI is a production-grade SaaS platform that helps users create, optimize, and export professional resumes. It combines an intuitive resume builder with a deterministic ATS scoring engine, AI-powered content improvement, daily job discovery, and a complete admin dashboard.
 
 **Live Demo:** [https://maniestaresumeai.netlify.app](https://maniestaresumeai.netlify.app)  
-**Portfolio:** [https://usmanmurtaza.netlify.app](https://usmanmurtaza.netlify.app)
+**Author Portfolio:** [https://usmanmurtaza.netlify.app](https://usmanmurtaza.netlify.app)
 
 ---
 
-## ✨ Features
+## Table of Contents
+
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Environment Variables](#environment-variables)
+  - [Firebase Setup](#firebase-setup)
+  - [Gemini Setup](#gemini-setup)
+  - [Running Locally](#running-locally)
+- [Testing](#testing)
+- [Deployment](#deployment)
+  - [Netlify](#netlify)
+  - [Firebase Admin Setup](#firebase-admin-setup)
+- [Author](#author)
+- [License](#license)
+
+---
+
+## Features
 
 ### Resume Builder
 
 - Create, edit, duplicate, and delete multiple resumes
-- Drag‑and‑drop sections and entries (coming soon)
-- Real‑time live preview
-- Five professional templates (Modern, Classic, Creative, Tech, Elegant)
-- Design customization: font family, size, spacing, color
+- Live preview with real-time updates
+- Five professional templates: Modern, Classic, Creative, Tech, Elegant
+- Design customization: font family, font size, spacing, accent color
 - Autosave with debounced persistence
 - Upload existing PDF/DOCX resumes and parse content (DOCX fully supported, PDF serverless)
 
 ### AI & ATS
 
 - AI assistant for summaries, experience bullets, skills, and achievements
-- AI suggestions are reviewable, with accept/reject/regenerate
+- AI suggestions are reviewable with accept / reject / regenerate
 - Strict factual integrity – AI never invents experience, metrics, or skills
 - Deterministic ATS scoring engine
-- Job description matching with matched/missing keywords
+- Job description matching with matched and missing keywords
 - ATS report with breakdown, recommendations, and warnings
 - AI optimization for specific jobs
 
 ### Daily Jobs & Alerts
 
 - Browse published jobs with search, filters, and featured section
-- Save/bookmark jobs
+- Save and bookmark jobs
 - Job detail with application link, skills, qualifications
 - Job preferences for personalized alerts
 - Notification bell with unread count and new job count
@@ -55,7 +96,7 @@ Maniesta ResumeAI is a production‑grade SaaS platform that helps users create,
 - Dashboard overview with platform statistics
 - User management: search, filter, user detail, resume counts
 - Resume management: view user resumes, ATS scores
-- ATS analysis history (if data model supports)
+- ATS analysis history (when data model supports it)
 - Job management: create, edit, publish, schedule, feature, delete
 - Analytics and admin search
 - Secure admin authorization via Firebase custom claims
@@ -69,7 +110,7 @@ Maniesta ResumeAI is a production‑grade SaaS platform that helps users create,
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 | Layer          | Technology                                              |
 | -------------- | ------------------------------------------------------- |
@@ -85,7 +126,7 @@ Maniesta ResumeAI is a production‑grade SaaS platform that helps users create,
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 src/
@@ -118,7 +159,7 @@ tests/                   # Unit and integration tests
 
 ---
 
-## 🚦 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -169,7 +210,7 @@ FIREBASE_SERVICE_ACCOUNT={"type":"service_account", ...}
    ```
 7. Create required composite indexes (see `firestore.indexes.json`).
 
-### Google AI Studio (Gemini) Setup
+### Gemini Setup
 
 1. Go to [Google AI Studio](https://aistudio.google.com/).
 2. Create an API key.
@@ -191,7 +232,7 @@ netlify dev
 
 ---
 
-## 🧪 Testing
+## Testing
 
 Run the test suite:
 
@@ -214,7 +255,7 @@ npm run build
 
 ---
 
-## 🚢 Deployment
+## Deployment
 
 ### Netlify
 
@@ -240,7 +281,7 @@ Or via a secure serverless function.
 
 ---
 
-## 👥 Author
+## Author
 
 **Usman Murtaza**  
 Full‑Stack Developer & UI/UX Engineer
@@ -250,13 +291,13 @@ Full‑Stack Developer & UI/UX Engineer
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🙏 Acknowledgements
+## Acknowledgements
 
 - Icons: custom SVG system
 - AI: Google Gemini
