@@ -1,17 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import {
-  CloseIcon,
-  DashboardIcon,
-  UsersIcon,
-  ResumeIcon,
-  ATSIcon,
-  JobsIcon,
-  NotificationIcon,
-  AnalyticsIcon,
-  SettingsIcon,
-  ArrowRightIcon,
-} from '@/components/ui/icons';
+import { CloseIcon, ArrowRightIcon } from '@/components/ui/icons';
 import { useUIStore } from '@/store/uiStore';
 import { Logo } from '@/components/common/Logo';
 import { cn } from '@/utils/cn';
@@ -28,7 +17,7 @@ export function MobileNav({ items }: MobileNavProps) {
     <AnimatePresence>
       {isSidebarOpen && (
         <>
-          {/* Backdrop with blur */}
+          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

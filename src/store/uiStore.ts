@@ -1,15 +1,16 @@
 import { create } from 'zustand';
 
 interface UIState {
-  isMobilePreviewOpen: boolean;
-  toggleMobilePreview: () => void;
   isSidebarOpen: boolean;
+  isMobilePreviewOpen: boolean;
   toggleSidebar: () => void;
+  toggleMobilePreview: () => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
-  isMobilePreviewOpen: false,
-  toggleMobilePreview: () => set((s) => ({ isMobilePreviewOpen: !s.isMobilePreviewOpen })),
   isSidebarOpen: false,
-  toggleSidebar: () => set((s) => ({ isSidebarOpen: !s.isSidebarOpen })),
+  isMobilePreviewOpen: false,
+  toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
+  toggleMobilePreview: () =>
+    set((state) => ({ isMobilePreviewOpen: !state.isMobilePreviewOpen })),
 }));
