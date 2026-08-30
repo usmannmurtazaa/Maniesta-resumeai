@@ -112,6 +112,7 @@ export default function BuilderPage() {
   const { save, flush } = useAutosave({
     onSave: handleSave,
     enabled: currentResume !== null,
+    delay: 10000, // 5 seconds pause before autosave
   });
 
   // Autosave when dirty (only if manual save is not active)

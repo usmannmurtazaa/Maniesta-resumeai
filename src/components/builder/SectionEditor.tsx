@@ -51,6 +51,46 @@ const sectionMeta: Record<SectionKey, { label: string; icon: React.ReactNode }> 
   volunteer: { label: 'Volunteer Experience', icon: <HeartIcon size={18} /> },
 };
 
+// Stable AIField component defined outside to prevent focus loss
+function AIField({
+  label,
+  value,
+  onChange,
+  onAI,
+  rows = 4,
+  isTextarea = true,
+}: {
+  label: string;
+  value: string;
+  onChange: (val: string) => void;
+  onAI: () => void;
+  rows?: number;
+  isTextarea?: boolean;
+}) {
+  return (
+    <div className="relative">
+      {isTextarea ? (
+        <Textarea
+          label={label}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          rows={rows}
+        />
+      ) : (
+        <Input label={label} value={value} onChange={(e) => onChange(e.target.value)} />
+      )}
+      <button
+        onClick={onAI}
+        className="absolute right-2 top-9 text-gray-400 hover:text-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-md p-1"
+        aria-label={`AI improve ${label}`}
+        title="Improve with AI"
+      >
+        <SparklesIcon size={16} />
+      </button>
+    </div>
+  );
+}
+
 export default function SectionEditor() {
   const { currentResume, updateContent } = useResumeStore();
   const prefersReducedMotion = useReducedMotion();
@@ -67,7 +107,6 @@ export default function SectionEditor() {
     volunteer: true,
   });
 
-  // AI modal state
   const [aiModal, setAiModal] = useState<{
     originalText: string;
     action: AIActionType;
@@ -85,7 +124,6 @@ export default function SectionEditor() {
     setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
-  // Open AI modal for a field
   const openAIModal = (section: SectionKey, field: string, originalText: string, id?: string) => {
     setAiModal({
       originalText,
@@ -94,7 +132,6 @@ export default function SectionEditor() {
     });
   };
 
-  // Handle accepted AI suggestion
   const handleAIAccept = (suggestion: string) => {
     if (!aiModal) return;
     const { section, field, id } = aiModal.target;
@@ -136,7 +173,6 @@ export default function SectionEditor() {
     setAiModal(null);
   };
 
-  // Update functions (unchanged)
   const updatePersonal = (field: string, value: string) => {
     updateContent((c) => {
       c.personalInfo = { ...c.personalInfo, [field]: value };
@@ -395,44 +431,6 @@ export default function SectionEditor() {
     </AnimatePresence>
   );
 
-  // Helper component for AI button next to textareas
-  const AIField = ({
-    value,
-    onChange,
-    onAI,
-    label,
-    rows = 4,
-    isTextarea = true,
-  }: {
-    value: string;
-    onChange: (val: string) => void;
-    onAI: () => void;
-    label: string;
-    rows?: number;
-    isTextarea?: boolean;
-  }) => (
-    <div className="relative">
-      {isTextarea ? (
-        <Textarea
-          label={label}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          rows={rows}
-        />
-      ) : (
-        <Input label={label} value={value} onChange={(e) => onChange(e.target.value)} />
-      )}
-      <button
-        onClick={onAI}
-        className="absolute right-2 top-9 text-gray-400 hover:text-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-md p-1"
-        aria-label={`AI improve ${label}`}
-        title="Improve with AI"
-      >
-        <SparklesIcon size={16} />
-      </button>
-    </div>
-  );
-
   return (
     <div className="space-y-3">
       {/* Personal Information */}
@@ -481,7 +479,7 @@ export default function SectionEditor() {
         )}
       </Card>
 
-      {/* Summary with AI */}
+      {/* Summary */}
       <Card className="overflow-hidden border-white/40 bg-white/70 backdrop-blur-md shadow-soft">
         {renderSectionHeader('summary', sectionMeta.summary.label)}
         {renderAnimatedContainer(

@@ -7,10 +7,12 @@ interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   error?: string;
   hint?: string;
   required?: boolean;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
 }
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ label, error, hint, required, className, id, ...props }, ref) => {
+  ({ label, error, hint, required, leftIcon, rightIcon, className, id, ...props }, ref) => {
     const autoId = useId();
     const inputId = id || autoId;
     const prefersReducedMotion = useReducedMotion();
@@ -27,24 +29,37 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           </label>
         )}
 
-        <textarea
-          ref={ref}
-          id={inputId}
-          required={required}
-          className={cn(
-            'block w-full rounded-lg border border-gray-300 bg-white/70 px-3 py-2 text-sm text-gray-900 shadow-sm backdrop-blur-sm transition-all duration-200',
-            'placeholder:text-gray-400',
-            'hover:border-gray-400',
-            'focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:shadow-md',
-            'disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200',
-            'read-only:cursor-default read-only:bg-gray-50',
-            error && 'border-red-500 focus:border-red-500 focus:ring-red-200 hover:border-red-400',
-            className
+        <div className="relative">
+          {leftIcon && (
+            <span className="pointer-events-none absolute left-3 top-3 text-gray-400">
+              {leftIcon}
+            </span>
           )}
-          aria-invalid={!!error}
-          aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
-          {...props}
-        />
+
+          <textarea
+            ref={ref}
+            id={inputId}
+            required={required}
+            className={cn(
+              'block w-full rounded-lg border border-gray-300 bg-white/70 px-3 py-2 text-sm text-gray-900 shadow-sm backdrop-blur-sm transition-all duration-200',
+              'placeholder:text-gray-400',
+              'hover:border-gray-400',
+              'focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:shadow-md',
+              'disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200',
+              'read-only:cursor-default read-only:bg-gray-50',
+              leftIcon ? 'pl-10' : undefined,
+              rightIcon ? 'pr-10' : undefined,
+              error &&
+                'border-red-500 focus:border-red-500 focus:ring-red-200 hover:border-red-400',
+              className
+            )}
+            aria-invalid={!!error}
+            aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
+            {...props}
+          />
+
+          {rightIcon && <span className="absolute right-3 top-3 text-gray-400">{rightIcon}</span>}
+        </div>
 
         <AnimatePresence mode="wait">
           {error ? (
