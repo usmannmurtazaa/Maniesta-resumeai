@@ -92,8 +92,8 @@ export default function ResumeTemplatesPage() {
                               templateId: tpl.id,
                               content: {
                                 personalInfo: {
-                                  fullName: 'Alex Johnson',
-                                  email: 'alex@example.com',
+                                  fullName: 'Usman Murtaza',
+                                  email: 'Usmanmurtaza2004@gmail.com',
                                   phone: '+1 234 567 890',
                                   location: 'Remote',
                                   title: 'Senior Developer',

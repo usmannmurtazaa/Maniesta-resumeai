@@ -40,49 +40,32 @@ import AdminAnalyticsPage from '@/pages/AdminAnalyticsPage';
 import AdminSettingsPage from '@/pages/AdminSettingsPage';
 
 export const routes = [
+  // Public routes
+  { path: '/', element: <LandingPage /> },
+  { path: '/login', element: <LoginPage /> },
+  { path: '/signup', element: <SignupPage /> },
+  { path: '/forgot-password', element: <ForgotPasswordPage /> },
+  { path: '/reset-password', element: <ResetPasswordPage /> },
+  { path: '/about', element: <AboutPage /> },
+  { path: '/privacy', element: <PrivacyPage /> },
+  { path: '/terms', element: <TermsPage /> },
+
+  // Authenticated user layout (header + footer)
   {
-    path: '/',
-    element: <LandingPage />,
-  },
-  {
-    path: '/login',
-    element: <LoginPage />,
-  },
-  {
-    path: '/signup',
-    element: <SignupPage />,
-  },
-  {
-    path: '/forgot-password',
-    element: <ForgotPasswordPage />,
-  },
-  {
-    path: '/reset-password',
-    element: <ResetPasswordPage />,
-  },
-  {
-    path: '/about',
-    element: <AboutPage />,
-  },
-  {
-    path: '/privacy',
-    element: <PrivacyPage />,
-  },
-  {
-    path: '/terms',
-    element: <TermsPage />,
-  },
-  {
-    path: '/dashboard',
     element: <DashboardLayout />,
     children: [
-      { index: true, element: <DashboardPage /> },
-      { path: 'settings', element: <SettingsPage /> },
-      { path: 'profile', element: <ProfilePage /> },
-      { path: 'templates', element: <ResumeTemplatesPage /> },
-      { path: 'ats', element: <ATSAnalyzerPage /> },
+      { path: '/dashboard', element: <DashboardPage /> },
+      { path: '/settings', element: <SettingsPage /> },
+      { path: '/profile', element: <ProfilePage /> },
+      { path: '/templates', element: <ResumeTemplatesPage /> },
+      { path: '/ats', element: <ATSAnalyzerPage /> },
+      { path: '/jobs', element: <JobsPage /> },
+      { path: '/jobs/saved', element: <SavedJobsPage /> },
+      { path: '/jobs/:jobId', element: <JobDetailPage /> },
     ],
   },
+
+  // Builder (custom layout)
   {
     path: '/builder',
     element: <BuilderLayout />,
@@ -91,19 +74,7 @@ export const routes = [
       { path: ':resumeId', element: <BuilderPage /> },
     ],
   },
-  // Jobs user-facing routes
-  {
-    path: '/jobs',
-    element: <JobsPage />,
-  },
-  {
-    path: '/jobs/saved',
-    element: <SavedJobsPage />,
-  },
-  {
-    path: '/jobs/:jobId',
-    element: <JobDetailPage />,
-  },
+
   // Admin routes
   {
     path: '/admin',
@@ -120,8 +91,6 @@ export const routes = [
       { path: 'settings', element: <AdminSettingsPage /> },
     ],
   },
-  {
-    path: '*',
-    element: <NotFoundPage />,
-  },
+
+  { path: '*', element: <NotFoundPage /> },
 ];

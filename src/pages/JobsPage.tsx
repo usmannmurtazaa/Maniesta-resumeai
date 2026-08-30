@@ -132,8 +132,6 @@ export function JobsPage() {
             </motion.div>
           )}
         </div>
-
-        <DashboardFooter />
       </div>
     </PageTransition>
   );

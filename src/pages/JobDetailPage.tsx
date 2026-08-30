@@ -77,8 +77,6 @@ export function JobDetailPage() {
             <JobDetail job={job} />
           </motion.div>
         </div>
-
-        <DashboardFooter />
       </div>
     </PageTransition>
   );

@@ -4,6 +4,7 @@ import { LandingNav } from '@/components/landing/LandingNav';
 import { HeroSection } from '@/components/landing/HeroSection';
 import { FeatureSection } from '@/components/landing/FeatureSection';
 import { HowItWorks } from '@/components/landing/HowItWorks';
+import { TemplatesSection } from '@/components/landing/TemplatesSection'; // added
 import { CTASection } from '@/components/landing/CTASection';
 import { Footer } from '@/components/landing/Footer';
 
@@ -28,11 +29,6 @@ export default function LandingPage() {
           className="pointer-events-none absolute bottom-0 right-0 h-80 w-80 rounded-full bg-accent-200/30 blur-3xl"
           animate={prefersReducedMotion ? {} : { y: [0, -15, 0], x: [0, -5, 0] }}
           transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="pointer-events-none absolute top-1/3 right-1/4 h-72 w-72 rounded-full bg-yellow-200/20 blur-3xl"
-          animate={prefersReducedMotion ? {} : { scale: [1, 1.05, 1] }}
-          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
         />
 
         <div className="relative z-10">
@@ -64,6 +60,16 @@ export default function LandingPage() {
               viewport={{ once: true, margin: '-80px' }}
             >
               <HowItWorks />
+            </motion.div>
+
+            {/* New Templates Section */}
+            <motion.div
+              variants={sectionVariants}
+              initial={prefersReducedMotion ? false : 'hidden'}
+              whileInView="visible"
+              viewport={{ once: true, margin: '-80px' }}
+            >
+              <TemplatesSection />
             </motion.div>
 
             <motion.div

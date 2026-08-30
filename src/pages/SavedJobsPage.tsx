@@ -130,8 +130,6 @@ export function SavedJobsPage() {
             </motion.div>
           )}
         </div>
-
-        <DashboardFooter />
       </div>
     </PageTransition>
   );

@@ -18,6 +18,13 @@ export default function ProfilePage() {
   const { user, isAdmin } = useAuthStore();
   const prefersReducedMotion = useReducedMotion();
 
+  // Determine a friendly display name: use displayName if available,
+  // otherwise the part before '@' in the email, falling back to 'User'
+  const displayName =
+    user?.displayName?.trim() ||
+    user?.email?.split('@')[0] ||
+    'User';
+
   const infoItems = [
     {
       icon: <MailIcon size={18} className="text-primary-600" />,
@@ -27,7 +34,7 @@ export default function ProfilePage() {
     {
       icon: <UserIcon size={18} className="text-primary-600" />,
       label: 'Display Name',
-      value: user?.displayName || 'User',
+      value: displayName,
     },
     {
       icon: <CalendarIcon size={18} className="text-accent-600" />,
@@ -83,13 +90,13 @@ export default function ProfilePage() {
                 <div className="flex items-end gap-4 -mt-10">
                   <Avatar
                     src={user?.photoURL}
-                    alt={user?.displayName || user?.email || undefined}
+                    alt={displayName}
                     size="lg"
                     className="ring-4 ring-white shadow-lg"
                   />
                   <div className="pb-1">
                     <h2 className="text-xl font-semibold text-gray-900">
-                      {user?.displayName || 'User'}
+                      {displayName}
                     </h2>
                     <p className="text-sm text-gray-500">{user?.email}</p>
                   </div>

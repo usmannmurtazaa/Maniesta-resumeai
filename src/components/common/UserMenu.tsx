@@ -97,7 +97,7 @@ export function UserMenu() {
               <button
                 onClick={() => {
                   setOpen(false);
-                  navigate('/dashboard/profile');
+                  navigate('/profile')
                 }}
                 className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-primary-50 hover:text-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 role="menuitem"
@@ -109,7 +109,7 @@ export function UserMenu() {
               <button
                 onClick={() => {
                   setOpen(false);
-                  navigate('/dashboard/settings');
+                  navigate('/settings')
                 }}
                 className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-primary-50 hover:text-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 role="menuitem"

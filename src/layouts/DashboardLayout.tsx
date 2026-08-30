@@ -20,7 +20,7 @@ const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: <DashboardIcon size={18} /> },
   { to: '/jobs', label: 'Daily Jobs', icon: <JobsIcon size={18} /> },
   { to: '/jobs/saved', label: 'Saved Jobs', icon: <BookmarkIcon size={18} /> },
-  { to: '/dashboard/settings', label: 'Settings', icon: <SettingsIcon size={18} /> },
+  { to: '/settings', label: 'Settings', icon: <SettingsIcon size={18} /> },
 ];
 
 export function DashboardLayout() {
