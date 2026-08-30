@@ -10,7 +10,16 @@ if (!apiKey) throw new Error('GEMINI_API_KEY is not set');
 const genAI = new GoogleGenerativeAI(apiKey);
 
 const RequestSchema = z.object({
-  action: z.enum(['improve', 'rewrite', 'shorten', 'expand', 'grammar', 'professionalize', 'ats', 'job']),
+  action: z.enum([
+    'improve',
+    'rewrite',
+    'shorten',
+    'expand',
+    'grammar',
+    'professionalize',
+    'ats',
+    'job',
+  ]),
   text: z.string().min(1).max(5000),
   context: z.string().optional(),
   jobDescription: z.string().optional(),
@@ -54,7 +63,12 @@ export const handler: Handler = async (event) => {
   };
 };
 
-function buildPrompt(action: string, text: string, context?: string, jobDescription?: string): string {
+function buildPrompt(
+  action: string,
+  text: string,
+  context?: string,
+  jobDescription?: string
+): string {
   const factualIntegrity = `
     IMPORTANT: Do not invent any facts, metrics, dates, companies, job titles, degrees, certifications, 
     technologies, achievements, or responsibilities. Only improve the wording of the provided content. 

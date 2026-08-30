@@ -9,7 +9,8 @@ export const handler: Handler = async (event) => {
 
   const body = JSON.parse(event.body || '{}');
   const { userId, disabled } = body;
-  if (!userId || typeof disabled !== 'boolean') return { statusCode: 400, body: JSON.stringify({ message: 'Invalid input' }) };
+  if (!userId || typeof disabled !== 'boolean')
+    return { statusCode: 400, body: JSON.stringify({ message: 'Invalid input' }) };
 
   await db.collection('users').doc(userId).update({ disabled });
   await logAdminAction(adminUid, disabled ? 'disable_user' : 'enable_user', 'user', userId);

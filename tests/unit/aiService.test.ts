@@ -16,7 +16,10 @@ describe('aiService', () => {
   });
 
   it('generate sends POST request', async () => {
-    const mockResponse = { ok: true, json: vi.fn().mockResolvedValue({ suggestions: ['Better text'] }) };
+    const mockResponse = {
+      ok: true,
+      json: vi.fn().mockResolvedValue({ suggestions: ['Better text'] }),
+    };
     (global.fetch as any).mockResolvedValue(mockResponse);
     const result = await aiService.generate({ action: 'improve', text: 'original' });
     expect(result.suggestions).toHaveLength(1);

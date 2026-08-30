@@ -31,7 +31,11 @@ export const handler: Handler = async (event) => {
 
   const body = JSON.parse(event.body || '{}');
   const parsed = jobSchema.safeParse(body);
-  if (!parsed.success) return { statusCode: 400, body: JSON.stringify({ message: 'Invalid input', errors: parsed.error.flatten() }) };
+  if (!parsed.success)
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ message: 'Invalid input', errors: parsed.error.flatten() }),
+    };
 
   const data = parsed.data;
   const now = admin.firestore.Timestamp.now();
@@ -39,7 +43,9 @@ export const handler: Handler = async (event) => {
   await docRef.set({
     ...data,
     deadline: data.deadline ? admin.firestore.Timestamp.fromDate(new Date(data.deadline)) : null,
-    scheduledAt: data.scheduledAt ? admin.firestore.Timestamp.fromDate(new Date(data.scheduledAt)) : null,
+    scheduledAt: data.scheduledAt
+      ? admin.firestore.Timestamp.fromDate(new Date(data.scheduledAt))
+      : null,
     publishedAt: data.status === 'published' ? now : null,
     createdAt: now,
     updatedAt: now,

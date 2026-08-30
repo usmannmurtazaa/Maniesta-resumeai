@@ -14,9 +14,12 @@ export function UserDetail() {
   useEffect(() => {
     if (userId) {
       setLoading('userDetail', true);
-      adminService.getUser(userId).then(({ user }) => {
-        setSelectedUser(user);
-      }).finally(() => setLoading('userDetail', false));
+      adminService
+        .getUser(userId)
+        .then(({ user }) => {
+          setSelectedUser(user);
+        })
+        .finally(() => setLoading('userDetail', false));
       adminService.getUserResumes(userId).then(({ resumes }) => setUserResumes(resumes));
       adminService.getATSAnalyses({ userId }).then(({ analyses }) => setAtsAnalyses(analyses));
     }
@@ -68,7 +71,9 @@ export function UserDetail() {
         <TabPanel index={1}>
           <ul>
             {atsAnalyses.map((analysis) => (
-              <li key={analysis.id}>{analysis.score} - {formatDate(analysis.createdAt)}</li>
+              <li key={analysis.id}>
+                {analysis.score} - {formatDate(analysis.createdAt)}
+              </li>
             ))}
           </ul>
         </TabPanel>

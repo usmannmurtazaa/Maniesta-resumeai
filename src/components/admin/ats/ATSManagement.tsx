@@ -34,7 +34,9 @@ export function ATSManagement() {
   }
 
   if (error) {
-    return <ErrorState title="Error loading ATS analyses" message={error} onRetry={fetchAnalyses} />;
+    return (
+      <ErrorState title="Error loading ATS analyses" message={error} onRetry={fetchAnalyses} />
+    );
   }
 
   return (

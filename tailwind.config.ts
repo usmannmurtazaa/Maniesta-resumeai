@@ -52,7 +52,8 @@ export default {
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'hero-pattern': 'linear-gradient(to bottom right, rgba(99,102,241,0.05), rgba(20,184,166,0.05))',
+        'hero-pattern':
+          'linear-gradient(to bottom right, rgba(99,102,241,0.05), rgba(20,184,166,0.05))',
       },
       animation: {
         'fade-in': 'fadeIn 0.3s ease-in-out',

@@ -1,63 +1,99 @@
+import { motion, useReducedMotion } from 'framer-motion';
+import { ArrowLeftIcon, ArrowRightIcon } from '@/components/ui/icons';
+
 interface PaginationProps {
   page: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  className?: string;
 }
 
-export function Pagination({ page, totalPages, onPageChange }: PaginationProps) {
+export function Pagination({ page, totalPages, onPageChange, className }: PaginationProps) {
+  const prefersReducedMotion = useReducedMotion();
+
+  if (totalPages <= 1) return null;
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      onPageChange(newPage);
+    }
+  };
+
   return (
-    <div className="flex items-center justify-between border-t border-gray-200 px-4 py-3 sm:px-6">
-      <div className="flex flex-1 justify-between sm:hidden">
-        <button
-          onClick={() => onPageChange(page - 1)}
+    <div
+      className={`flex items-center justify-between rounded-xl border border-white/40 bg-white/70 px-4 py-3 shadow-soft backdrop-blur-md sm:px-6 ${className || ''}`}
+    >
+      {/* Mobile navigation */}
+      <div className="flex flex-1 items-center justify-between sm:hidden">
+        <motion.button
+          whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
+          whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
+          onClick={() => handlePageChange(page - 1)}
           disabled={page === 1}
-          className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          className="flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-50"
         >
+          <ArrowLeftIcon size={16} />
           Previous
-        </button>
-        <button
-          onClick={() => onPageChange(page + 1)}
+        </motion.button>
+        <motion.button
+          whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
+          whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
+          onClick={() => handlePageChange(page + 1)}
           disabled={page === totalPages}
-          className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          className="flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-50"
         >
           Next
-        </button>
+          <ArrowRightIcon size={16} />
+        </motion.button>
       </div>
-      <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm text-gray-700">
-            Page <span className="font-medium">{page}</span> of <span className="font-medium">{totalPages}</span>
-          </p>
-        </div>
-        <div>
-          <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-            <button
-              onClick={() => onPageChange(page - 1)}
-              disabled={page === 1}
-              className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+
+      {/* Desktop pagination */}
+      <div className="hidden flex-1 items-center justify-between sm:flex">
+        <p className="text-sm text-gray-600">
+          Page <span className="font-semibold text-gray-900">{page}</span> of{' '}
+          <span className="font-semibold text-gray-900">{totalPages}</span>
+        </p>
+
+        <nav className="flex items-center gap-1" aria-label="Pagination">
+          <motion.button
+            whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
+            whileHover={prefersReducedMotion ? {} : { scale: 1.1 }}
+            onClick={() => handlePageChange(page - 1)}
+            disabled={page === 1}
+            aria-label="Previous page"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-500 shadow-sm transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <ArrowLeftIcon size={16} />
+          </motion.button>
+
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+            <motion.button
+              key={p}
+              whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
+              whileHover={prefersReducedMotion ? {} : { scale: 1.1 }}
+              onClick={() => handlePageChange(p)}
+              aria-current={p === page ? 'page' : undefined}
+              className={`h-9 min-w-9 px-3 rounded-lg text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                p === page
+                  ? 'bg-gradient-to-r from-primary-600 to-primary-500 text-white shadow-soft'
+                  : 'text-gray-700 hover:bg-gray-100'
+              }`}
             >
-              Previous
-            </button>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-              <button
-                key={p}
-                onClick={() => onPageChange(p)}
-                className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ${
-                  p === page ? 'bg-primary-600 text-white' : 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
-                }`}
-              >
-                {p}
-              </button>
-            ))}
-            <button
-              onClick={() => onPageChange(page + 1)}
-              disabled={page === totalPages}
-              className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-            >
-              Next
-            </button>
-          </nav>
-        </div>
+              {p}
+            </motion.button>
+          ))}
+
+          <motion.button
+            whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
+            whileHover={prefersReducedMotion ? {} : { scale: 1.1 }}
+            onClick={() => handlePageChange(page + 1)}
+            disabled={page === totalPages}
+            aria-label="Next page"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-500 shadow-sm transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <ArrowRightIcon size={16} />
+          </motion.button>
+        </nav>
       </div>
     </div>
   );

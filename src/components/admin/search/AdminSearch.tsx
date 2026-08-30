@@ -58,7 +58,9 @@ export function AdminSearch() {
               className="block w-full text-left px-4 py-2 hover:bg-gray-100"
             >
               <span className="font-medium">{result.title}</span>
-              {result.subtitle && <span className="text-sm text-gray-500 ml-2">{result.subtitle}</span>}
+              {result.subtitle && (
+                <span className="text-sm text-gray-500 ml-2">{result.subtitle}</span>
+              )}
             </button>
           ))}
         </div>

@@ -68,12 +68,16 @@ export function JobForm({ initialData, onSuccess }: JobFormProps) {
           preferredSkills: initialData.preferredSkills.join(', '),
           qualifications: initialData.qualifications.join(', '),
           applicationUrl: initialData.applicationUrl,
-          deadline: initialData.deadline ? new Date(initialData.deadline).toISOString().split('T')[0] : '',
+          deadline: initialData.deadline
+            ? new Date(initialData.deadline).toISOString().split('T')[0]
+            : '',
           category: initialData.category,
           tags: initialData.tags.join(', '),
           status: initialData.status,
           featured: initialData.featured,
-          scheduledAt: initialData.scheduledAt ? new Date(initialData.scheduledAt).toISOString().split('T')[0] : '',
+          scheduledAt: initialData.scheduledAt
+            ? new Date(initialData.scheduledAt).toISOString().split('T')[0]
+            : '',
         }
       : {
           workMode: 'onsite',
@@ -106,13 +110,25 @@ export function JobForm({ initialData, onSuccess }: JobFormProps) {
         experienceLevel: data.experienceLevel,
         salary: data.salary,
         description: data.description,
-        requiredSkills: data.requiredSkills.split(',').map((s) => s.trim()).filter(Boolean),
-        preferredSkills: data.preferredSkills.split(',').map((s) => s.trim()).filter(Boolean),
-        qualifications: data.qualifications.split(',').map((s) => s.trim()).filter(Boolean),
+        requiredSkills: data.requiredSkills
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean),
+        preferredSkills: data.preferredSkills
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean),
+        qualifications: data.qualifications
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean),
         applicationUrl: data.applicationUrl,
         deadline: data.deadline ? new Date(data.deadline) : null,
         category: data.category,
-        tags: data.tags.split(',').map((s) => s.trim()).filter(Boolean),
+        tags: data.tags
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean),
         status: data.status,
         featured: data.featured,
         scheduledAt: data.scheduledAt ? new Date(data.scheduledAt) : null,
@@ -146,7 +162,9 @@ export function JobForm({ initialData, onSuccess }: JobFormProps) {
         <div>
           <label className="block text-sm font-medium">Company Name</label>
           <Input {...register('companyName')} />
-          {errors.companyName && <p className="text-red-500 text-sm">{errors.companyName.message}</p>}
+          {errors.companyName && (
+            <p className="text-red-500 text-sm">{errors.companyName.message}</p>
+          )}
         </div>
         <div>
           <label className="block text-sm font-medium">Company Logo</label>
@@ -197,7 +215,9 @@ export function JobForm({ initialData, onSuccess }: JobFormProps) {
         <div className="col-span-2">
           <label className="block text-sm font-medium">Description</label>
           <Textarea {...register('description')} rows={5} />
-          {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
+          {errors.description && (
+            <p className="text-red-500 text-sm">{errors.description.message}</p>
+          )}
         </div>
         <div>
           <label className="block text-sm font-medium">Required Skills (comma-separated)</label>
@@ -209,12 +229,17 @@ export function JobForm({ initialData, onSuccess }: JobFormProps) {
         </div>
         <div className="col-span-2">
           <label className="block text-sm font-medium">Qualifications (comma-separated)</label>
-          <Input {...register('qualifications')} placeholder="Bachelor's degree, 5+ years experience, ..." />
+          <Input
+            {...register('qualifications')}
+            placeholder="Bachelor's degree, 5+ years experience, ..."
+          />
         </div>
         <div>
           <label className="block text-sm font-medium">Application URL</label>
           <Input {...register('applicationUrl')} placeholder="https://..." />
-          {errors.applicationUrl && <p className="text-red-500 text-sm">{errors.applicationUrl.message}</p>}
+          {errors.applicationUrl && (
+            <p className="text-red-500 text-sm">{errors.applicationUrl.message}</p>
+          )}
         </div>
         <div>
           <label className="block text-sm font-medium">Deadline</label>

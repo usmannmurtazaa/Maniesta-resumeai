@@ -18,7 +18,12 @@ export const handler: Handler = async (event) => {
     const name = (data.displayName || '').toLowerCase();
     const email = (data.email || '').toLowerCase();
     if (name.includes(query) || email.includes(query)) {
-      results.push({ type: 'user', id: doc.id, title: data.displayName || data.email, subtitle: data.email });
+      results.push({
+        type: 'user',
+        id: doc.id,
+        title: data.displayName || data.email,
+        subtitle: data.email,
+      });
     }
   });
 
@@ -35,7 +40,10 @@ export const handler: Handler = async (event) => {
   const jobsSnapshot = await db.collection('jobs').limit(5).get();
   jobsSnapshot.docs.forEach((doc) => {
     const data = doc.data();
-    if (data.title?.toLowerCase().includes(query) || data.companyName?.toLowerCase().includes(query)) {
+    if (
+      data.title?.toLowerCase().includes(query) ||
+      data.companyName?.toLowerCase().includes(query)
+    ) {
       results.push({ type: 'job', id: doc.id, title: data.title, subtitle: data.companyName });
     }
   });

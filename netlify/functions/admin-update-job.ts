@@ -13,7 +13,11 @@ export const handler: Handler = async (event) => {
   if (!jobId) return { statusCode: 400, body: JSON.stringify({ message: 'jobId required' }) };
 
   const parsed = jobUpdateSchema.safeParse(jobData);
-  if (!parsed.success) return { statusCode: 400, body: JSON.stringify({ message: 'Invalid input', errors: parsed.error.flatten() }) };
+  if (!parsed.success)
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ message: 'Invalid input', errors: parsed.error.flatten() }),
+    };
 
   const data = parsed.data;
   const updateData: any = { ...data, updatedAt: new Date() };

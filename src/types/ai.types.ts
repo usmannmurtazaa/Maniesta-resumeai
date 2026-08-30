@@ -1,12 +1,5 @@
 export type AIActionType =
-  | 'improve'
-  | 'rewrite'
-  | 'shorten'
-  | 'expand'
-  | 'grammar'
-  | 'professionalize'
-  | 'ats'
-  | 'job';
+  'improve' | 'rewrite' | 'shorten' | 'expand' | 'grammar' | 'professionalize' | 'ats' | 'job';
 
 export interface AIRequest {
   action: AIActionType;

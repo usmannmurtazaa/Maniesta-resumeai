@@ -8,7 +8,8 @@ export function AdminAnalytics() {
 
   useEffect(() => {
     setLoading('analytics', true);
-    adminService.getAnalytics()
+    adminService
+      .getAnalytics()
       .then((data) => setAnalytics(data))
       .finally(() => setLoading('analytics', false));
   }, [setAnalytics, setLoading]);

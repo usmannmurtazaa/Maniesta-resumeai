@@ -6,7 +6,7 @@ Built with React, TypeScript, Vite, Firebase, Netlify Functions, and Gemini AI.
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)  
 ![License](https://img.shields.io/badge/license-MIT-blue)  
-![Version](https://img.shields.io/badge/version-1.0.0-orange)  
+![Version](https://img.shields.io/badge/version-1.0.0-orange)
 
 ---
 
@@ -15,13 +15,14 @@ Built with React, TypeScript, Vite, Firebase, Netlify Functions, and Gemini AI.
 Maniesta ResumeAI is a production‑grade SaaS platform that helps users create, optimize, and export professional resumes. It combines an intuitive resume builder with a deterministic ATS scoring engine, AI‑powered content improvement, daily job discovery, and a complete admin dashboard.
 
 **Live Demo:** [https://maniestaresumeai.netlify.app](https://maniestaresumeai.netlify.app)  
-**Portfolio:** [https://usmanmurtaza.netlify.app](https://usmanmurtaza.netlify.app)  
+**Portfolio:** [https://usmanmurtaza.netlify.app](https://usmanmurtaza.netlify.app)
 
 ---
 
 ## ✨ Features
 
 ### Resume Builder
+
 - Create, edit, duplicate, and delete multiple resumes
 - Drag‑and‑drop sections and entries (coming soon)
 - Real‑time live preview
@@ -31,6 +32,7 @@ Maniesta ResumeAI is a production‑grade SaaS platform that helps users create,
 - Upload existing PDF/DOCX resumes and parse content (DOCX fully supported, PDF serverless)
 
 ### AI & ATS
+
 - AI assistant for summaries, experience bullets, skills, and achievements
 - AI suggestions are reviewable, with accept/reject/regenerate
 - Strict factual integrity – AI never invents experience, metrics, or skills
@@ -40,6 +42,7 @@ Maniesta ResumeAI is a production‑grade SaaS platform that helps users create,
 - AI optimization for specific jobs
 
 ### Daily Jobs & Alerts
+
 - Browse published jobs with search, filters, and featured section
 - Save/bookmark jobs
 - Job detail with application link, skills, qualifications
@@ -48,6 +51,7 @@ Maniesta ResumeAI is a production‑grade SaaS platform that helps users create,
 - Personalized job notifications and deadline reminders (serverless functions)
 
 ### Admin Dashboard
+
 - Dashboard overview with platform statistics
 - User management: search, filter, user detail, resume counts
 - Resume management: view user resumes, ATS scores
@@ -57,6 +61,7 @@ Maniesta ResumeAI is a production‑grade SaaS platform that helps users create,
 - Secure admin authorization via Firebase custom claims
 
 ### Authentication
+
 - Email/password login and signup
 - Google authentication
 - Password reset flow
@@ -66,17 +71,17 @@ Maniesta ResumeAI is a production‑grade SaaS platform that helps users create,
 
 ## 🛠 Tech Stack
 
-| Layer          | Technology |
-|----------------|------------|
+| Layer          | Technology                                              |
+| -------------- | ------------------------------------------------------- |
 | Frontend       | React 18, TypeScript, Vite, Tailwind CSS, Framer Motion |
-| State          | Zustand, Immer |
-| Forms          | React Hook Form, Zod |
-| Backend        | Netlify Functions |
-| Database       | Firebase Firestore |
-| Storage        | Firebase Storage |
-| Authentication | Firebase Authentication |
-| AI             | Google Gemini API |
-| Testing        | Vitest, React Testing Library |
+| State          | Zustand, Immer                                          |
+| Forms          | React Hook Form, Zod                                    |
+| Backend        | Netlify Functions                                       |
+| Database       | Firebase Firestore                                      |
+| Storage        | Firebase Storage                                        |
+| Authentication | Firebase Authentication                                 |
+| AI             | Google Gemini API                                       |
+| Testing        | Vitest, React Testing Library                           |
 
 ---
 
@@ -116,6 +121,7 @@ tests/                   # Unit and integration tests
 ## 🚦 Getting Started
 
 ### Prerequisites
+
 - Node.js 18+
 - npm or yarn
 - Firebase account

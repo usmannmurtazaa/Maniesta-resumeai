@@ -1,13 +1,18 @@
+/* Maniesta ResumeAI - Print Styles */
+
 @media print {
+  /* Hide everything by default */
   body * {
     visibility: hidden;
   }
 
+  /* Show only the print area */
   .print-area,
   .print-area * {
     visibility: visible;
   }
 
+  /* Position the print area at top-left */
   .print-area {
     position: absolute;
     left: 0;
@@ -16,13 +21,111 @@
     margin: 0;
     padding: 0;
     box-shadow: none;
+    border: none;
+    border-radius: 0;
   }
 
-  /* Hide builder controls and other non-print elements */
+  /* Reset backgrounds and shadows for clean printing */
+  .print-area,
+  .print-area * {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    border-color: #e5e7eb !important;
+  }
+
+  /* Ensure proper page margins */
+  @page {
+    margin: 0.75in;
+    size: letter;
+  }
+
+  /* Hide builder controls and non-print elements */
   .editor-panel,
   .preview-panel .builder-controls,
   .mobile-toggle,
-  .save-button {
+  .save-button,
+  .builder-header,
+  .no-print {
     display: none !important;
+  }
+
+  /* Prevent page breaks inside entries */
+  .print-area section,
+  .print-area .entry,
+  .print-area .experience-item,
+  .print-area .education-item,
+  .print-area .project-item {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Ensure headings don't separate from content */
+  .print-area h2,
+  .print-area h3,
+  .print-area h4 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  /* Remove hover effects and transitions when printing */
+  .print-area * {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  /* Ensure links are readable */
+  .print-area a {
+    text-decoration: none;
+    color: black;
+  }
+
+  .print-area a[href]:after {
+    content: ' (' attr(href) ')';
+    font-size: 0.8em;
+    color: #6b7280;
+  }
+
+  /* Reduce spacing for compact print */
+  .print-area {
+    line-height: 1.4;
+  }
+
+  /* Ensure images don't overflow */
+  .print-area img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Remove any fixed positioning */
+  .print-area,
+  .print-area * {
+    position: static !important;
+  }
+
+  /* Preserve whitespace in descriptions */
+  .print-area p {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  /* Ensure list bullets print correctly */
+  .print-area ul {
+    list-style-position: outside;
+    margin-left: 1.25rem;
+  }
+
+  .print-area li {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+/* Additional print options for A4 paper */
+@media print and (max-width: 210mm) {
+  @page {
+    size: A4;
+    margin: 0.5in;
   }
 }

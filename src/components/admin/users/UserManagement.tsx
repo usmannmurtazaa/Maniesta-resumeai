@@ -8,15 +8,8 @@ import { TableSkeleton } from '@/components/ui/TableSkeleton';
 import { EmptyState } from '@/components/common/EmptyState';
 
 export function UserManagement() {
-  const {
-    users,
-    usersPagination,
-    loading,
-    error,
-    setUsers,
-    setLoading,
-    setError,
-  } = useAdminStore();
+  const { users, usersPagination, loading, error, setUsers, setLoading, setError } =
+    useAdminStore();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [adminFilter, setAdminFilter] = useState('all');
@@ -59,9 +52,7 @@ export function UserManagement() {
         <EmptyState
           title="Error loading users"
           description={error}
-          action={
-            <Button onClick={() => fetchUsers(true)}>Retry</Button>
-          }
+          action={<Button onClick={() => fetchUsers(true)}>Retry</Button>}
         />
       </div>
     );
@@ -82,10 +73,7 @@ export function UserManagement() {
         onAdminFilterChange={setAdminFilter}
       />
       {users.length === 0 ? (
-        <EmptyState
-          title="No users found"
-          description="Try adjusting your search or filters."
-        />
+        <EmptyState title="No users found" description="Try adjusting your search or filters." />
       ) : (
         <>
           <UserTable users={users} />

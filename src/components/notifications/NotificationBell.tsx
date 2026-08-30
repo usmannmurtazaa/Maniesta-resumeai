@@ -8,7 +8,8 @@ import { NotificationIcon } from '@/components/ui/icons';
 
 export function NotificationBell() {
   const user = useAuthStore((s) => s.user);
-  const { notifications, setNotifications, unreadCount, newJobsCount, setNewJobsCount } = useNotificationStore();
+  const { notifications, setNotifications, unreadCount, newJobsCount, setNewJobsCount } =
+    useNotificationStore();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {

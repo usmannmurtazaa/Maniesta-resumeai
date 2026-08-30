@@ -16,9 +16,7 @@ export const handler: Handler = async () => {
 
     // Get users with savedJobs (array field exists and not empty)
     // Since Firestore doesn't support 'array != []', we can query users where savedJobs is not null
-    const usersSnapshot = await db.collection('users')
-      .where('savedJobs', '!=', null)
-      .get();
+    const usersSnapshot = await db.collection('users').where('savedJobs', '!=', null).get();
 
     if (usersSnapshot.empty) return { statusCode: 200, body: JSON.stringify({ processed: 0 }) };
 
@@ -38,7 +36,8 @@ export const handler: Handler = async () => {
         const deadline = job.deadline.toDate();
         if (deadline > now && deadline < soon) {
           // Check duplicate
-          const duplicateQuery = await db.collection('notifications')
+          const duplicateQuery = await db
+            .collection('notifications')
             .where('userId', '==', userDoc.id)
             .where('jobId', '==', jobId)
             .where('type', '==', 'deadline-reminder')

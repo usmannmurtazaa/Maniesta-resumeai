@@ -11,7 +11,14 @@ interface UserFiltersProps {
   onAdminFilterChange: (val: string) => void;
 }
 
-export function UserFilters({ search, onSearchChange, statusFilter, onStatusFilterChange, adminFilter, onAdminFilterChange }: UserFiltersProps) {
+export function UserFilters({
+  search,
+  onSearchChange,
+  statusFilter,
+  onStatusFilterChange,
+  adminFilter,
+  onAdminFilterChange,
+}: UserFiltersProps) {
   return (
     <div className="flex flex-wrap gap-4 mb-4">
       <div className="relative">
@@ -22,7 +29,10 @@ export function UserFilters({ search, onSearchChange, statusFilter, onStatusFilt
           placeholder="Search by name or email"
           className="pl-10 w-64"
         />
-        <SearchIcon size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+        <SearchIcon
+          size={18}
+          className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+        />
       </div>
       <Select value={statusFilter} onChange={(e) => onStatusFilterChange(e.target.value)}>
         <option value="all">All Status</option>

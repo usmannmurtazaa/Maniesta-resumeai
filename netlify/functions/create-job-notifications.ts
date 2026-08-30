@@ -16,21 +16,20 @@ export const handler: Handler = async () => {
     const since = new Date(now.getTime() - 24 * 60 * 60 * 1000); // last 24 hours
 
     // Get users with jobPreferences
-    const usersSnapshot = await db.collection('users')
-      .where('jobPreferences', '!=', null)
-      .get();
+    const usersSnapshot = await db.collection('users').where('jobPreferences', '!=', null).get();
 
     if (usersSnapshot.empty) return { statusCode: 200, body: JSON.stringify({ processed: 0 }) };
 
     // Get jobs published in the last 24 hours
-    const jobsSnapshot = await db.collection('jobs')
+    const jobsSnapshot = await db
+      .collection('jobs')
       .where('status', '==', 'published')
       .where('publishedAt', '>=', since)
       .get();
 
     if (jobsSnapshot.empty) return { statusCode: 200, body: JSON.stringify({ processed: 0 }) };
 
-    const jobs = jobsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const jobs = jobsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
     let processed = 0;
 
@@ -46,7 +45,8 @@ export const handler: Handler = async () => {
         // Create notification if score >= 60 (threshold)
         if (score >= 60) {
           // Check for duplicates
-          const duplicateQuery = await db.collection('notifications')
+          const duplicateQuery = await db
+            .collection('notifications')
             .where('userId', '==', userId)
             .where('jobId', '==', job.id)
             .where('type', '==', 'job-match')

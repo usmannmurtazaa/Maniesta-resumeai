@@ -1,21 +1,28 @@
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  where,
-  orderBy,
-  limit,
-} from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, where, limit } from 'firebase/firestore';
 import { db } from '@/services/firebase/config';
-import type { AdminUser, AdminResume, AdminATS, AdminAnalytics, AdminSearchResult } from '@/types/admin.types';
+import type {
+  AdminUser,
+  AdminResume,
+  AdminATS,
+  AdminAnalytics,
+  AdminSearchResult,
+} from '@/types/admin.types';
 import type { Job } from '@/types/job.types';
 
 // Helper to convert Firestore Timestamp to Date
 function toDate(value: any): Date | null {
   if (!value) return null;
   return value.toDate ? value.toDate() : new Date(value);
+}
+
+// Helper to extract error message from fetch response
+async function getErrorMessage(response: Response): Promise<string> {
+  try {
+    const data = await response.json();
+    return data.message || `Request failed with status ${response.status}`;
+  } catch {
+    return `Request failed with status ${response.status}`;
+  }
 }
 
 export const adminService = {
@@ -40,9 +47,7 @@ export const adminService = {
     if (filters?.search) {
       const s = filters.search.toLowerCase();
       users = users.filter(
-        (u) =>
-          u.email?.toLowerCase().includes(s) ||
-          (u.displayName || '').toLowerCase().includes(s)
+        (u) => u.email?.toLowerCase().includes(s) || (u.displayName || '').toLowerCase().includes(s)
       );
     }
     if (filters?.status === 'active') users = users.filter((u) => !u.disabled);
@@ -218,7 +223,12 @@ export const adminService = {
       const name = (data.displayName || '').toLowerCase();
       const email = (data.email || '').toLowerCase();
       if (name.includes(q) || email.includes(q)) {
-        results.push({ type: 'user', id: docSnap.id, title: data.displayName || data.email, subtitle: data.email });
+        results.push({
+          type: 'user',
+          id: docSnap.id,
+          title: data.displayName || data.email,
+          subtitle: data.email,
+        });
       }
     });
 
@@ -233,26 +243,26 @@ export const adminService = {
     const jobsSnap = await getDocs(collection(db, 'jobs'));
     jobsSnap.forEach((docSnap) => {
       const data = docSnap.data();
-      if (
-        data.title?.toLowerCase().includes(q) ||
-        data.companyName?.toLowerCase().includes(q)
-      ) {
-        results.push({ type: 'job', id: docSnap.id, title: data.title, subtitle: data.companyName });
+      if (data.title?.toLowerCase().includes(q) || data.companyName?.toLowerCase().includes(q)) {
+        results.push({
+          type: 'job',
+          id: docSnap.id,
+          title: data.title,
+          subtitle: data.companyName,
+        });
       }
     });
 
     return results;
   },
 
-  // Write operations still require server-side admin checks.
-  // For now, they call the existing Netlify functions.
   async createJob(jobData: any) {
     const response = await fetch('/.netlify/functions/admin-create-job', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(jobData),
     });
-    if (!response.ok) throw new Error(await response.text());
+    if (!response.ok) throw new Error(await getErrorMessage(response));
     return response.json();
   },
 
@@ -262,7 +272,7 @@ export const adminService = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ jobId, ...jobData }),
     });
-    if (!response.ok) throw new Error(await response.text());
+    if (!response.ok) throw new Error(await getErrorMessage(response));
     return response.json();
   },
 
@@ -272,7 +282,7 @@ export const adminService = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ jobId }),
     });
-    if (!response.ok) throw new Error(await response.text());
+    if (!response.ok) throw new Error(await getErrorMessage(response));
     return response.json();
   },
 };

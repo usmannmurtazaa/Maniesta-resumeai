@@ -11,11 +11,17 @@ import SignupPage from '@/pages/SignupPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import ForgotPasswordPage from '@/pages/ForgotPasswordPage';
 import ResetPasswordPage from '@/pages/ResetPasswordPage';
+import AboutPage from '@/pages/AboutPage';
+import PrivacyPage from '@/pages/PrivacyPage';
+import TermsPage from '@/pages/TermsPage';
 
 // User pages
 import DashboardPage from '@/pages/DashboardPage';
 import BuilderPage from '@/pages/BuilderPage';
 import SettingsPage from '@/pages/SettingsPage';
+import ProfilePage from '@/pages/ProfilePage';
+import ResumeTemplatesPage from '@/pages/ResumeTemplatesPage';
+import ATSAnalyzerPage from '@/pages/ATSAnalyzerPage';
 
 // Jobs pages (user-facing)
 import { JobsPage } from '@/pages/JobsPage';
@@ -55,11 +61,26 @@ export const routes = [
     element: <ResetPasswordPage />,
   },
   {
+    path: '/about',
+    element: <AboutPage />,
+  },
+  {
+    path: '/privacy',
+    element: <PrivacyPage />,
+  },
+  {
+    path: '/terms',
+    element: <TermsPage />,
+  },
+  {
     path: '/dashboard',
     element: <DashboardLayout />,
     children: [
       { index: true, element: <DashboardPage /> },
       { path: 'settings', element: <SettingsPage /> },
+      { path: 'profile', element: <ProfilePage /> },
+      { path: 'templates', element: <ResumeTemplatesPage /> },
+      { path: 'ats', element: <ATSAnalyzerPage /> },
     ],
   },
   {

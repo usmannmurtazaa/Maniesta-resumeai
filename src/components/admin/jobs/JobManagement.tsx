@@ -55,7 +55,12 @@ export function JobManagement() {
     <div>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Job Management</h2>
-        <Button onClick={() => { setEditingJob(null); setShowForm(true); }}>
+        <Button
+          onClick={() => {
+            setEditingJob(null);
+            setShowForm(true);
+          }}
+        >
           <PlusIcon size={18} className="mr-2" /> Create Job
         </Button>
       </div>
@@ -63,14 +68,36 @@ export function JobManagement() {
         <EmptyState
           title="No jobs yet"
           description="Create your first job post to get started."
-          action={<Button onClick={() => { setEditingJob(null); setShowForm(true); }}>Create Job</Button>}
+          action={
+            <Button
+              onClick={() => {
+                setEditingJob(null);
+                setShowForm(true);
+              }}
+            >
+              Create Job
+            </Button>
+          }
         />
       ) : (
-        <JobTable jobs={jobs} onEdit={(job) => { setEditingJob(job); setShowForm(true); }} onDelete={(id) => setDeleteConfirm(id)} />
+        <JobTable
+          jobs={jobs}
+          onEdit={(job) => {
+            setEditingJob(job);
+            setShowForm(true);
+          }}
+          onDelete={(id) => setDeleteConfirm(id)}
+        />
       )}
       {showForm && (
         <Modal onClose={() => setShowForm(false)}>
-          <JobForm initialData={editingJob} onSuccess={() => { setShowForm(false); fetchJobs(); }} />
+          <JobForm
+            initialData={editingJob}
+            onSuccess={() => {
+              setShowForm(false);
+              fetchJobs();
+            }}
+          />
         </Modal>
       )}
       {deleteConfirm && (
@@ -78,8 +105,12 @@ export function JobManagement() {
           <div className="p-4">
             <p>Are you sure you want to delete this job?</p>
             <div className="flex justify-end space-x-2 mt-4">
-              <Button variant="outline" onClick={() => setDeleteConfirm(null)}>Cancel</Button>
-              <Button variant="danger" onClick={() => handleDelete(deleteConfirm)}>Delete</Button>
+              <Button variant="outline" onClick={() => setDeleteConfirm(null)}>
+                Cancel
+              </Button>
+              <Button variant="danger" onClick={() => handleDelete(deleteConfirm)}>
+                Delete
+              </Button>
             </div>
           </div>
         </Modal>

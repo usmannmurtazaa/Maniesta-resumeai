@@ -17,7 +17,9 @@ export function calculateJobMatchScore(preferences: JobPreferences, job: Job): n
   };
 
   if (preferences.categories?.includes(job.category)) score += weights.category;
-  if (preferences.locations?.some((loc) => job.location.toLowerCase().includes(loc.toLowerCase()))) {
+  if (
+    preferences.locations?.some((loc) => job.location.toLowerCase().includes(loc.toLowerCase()))
+  ) {
     score += weights.location;
   }
   if (preferences.workModes?.includes(job.workMode)) score += weights.workMode;

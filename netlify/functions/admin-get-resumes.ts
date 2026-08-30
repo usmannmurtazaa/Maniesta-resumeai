@@ -10,7 +10,7 @@ export const handler: Handler = async (event) => {
   if (!userId) return { statusCode: 400, body: JSON.stringify({ message: 'userId required' }) };
 
   const snapshot = await db.collection('resumes').where('userId', '==', userId).get();
-  const resumes = snapshot.docs.map(doc => ({
+  const resumes = snapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
     createdAt: doc.data().createdAt?.toDate?.() || null,

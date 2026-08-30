@@ -1,5 +1,11 @@
 import { create } from 'zustand';
-import type { AdminUser, AdminResume, AdminATS, AdminAnalytics, AdminSearchResult } from '@/types/admin.types';
+import type {
+  AdminUser,
+  AdminResume,
+  AdminATS,
+  AdminAnalytics,
+  AdminSearchResult,
+} from '@/types/admin.types';
 
 interface AdminState {
   users: AdminUser[];
@@ -62,13 +68,13 @@ export const useAdminStore = create<AdminState>((set) => ({
       atsPagination: { lastVisible, hasMore },
       loading: { ...state.loading, ats: false },
     })),
-  setAnalytics: (analytics) => set((state) => ({
-  analytics,
-  loading: { ...state.loading, analytics: false }
-})),
+  setAnalytics: (analytics) =>
+    set((state) => ({
+      analytics,
+      loading: { ...state.loading, analytics: false },
+    })),
   setSearchResults: (searchResults) => set({ searchResults }),
-  setLoading: (key, value) =>
-    set((state) => ({ loading: { ...state.loading, [key]: value } })),
+  setLoading: (key, value) => set((state) => ({ loading: { ...state.loading, [key]: value } })),
   setError: (error) => set({ error }),
   clearAdminData: () =>
     set({

@@ -29,7 +29,12 @@ export default defineConfig({
           if (id.includes('node_modules/@firebase')) return 'firebase-vendor';
           if (id.includes('node_modules/react-router')) return 'react-router-vendor';
           if (id.includes('node_modules/framer-motion')) return 'motion-vendor';
-          if (id.includes('node_modules/zod') || id.includes('node_modules/react-hook-form') || id.includes('node_modules/@hookform')) return 'form-vendor';
+          if (
+            id.includes('node_modules/zod') ||
+            id.includes('node_modules/react-hook-form') ||
+            id.includes('node_modules/@hookform')
+          )
+            return 'form-vendor';
           // Do not create a generic 'vendor' chunk to avoid cycles
         },
       },

@@ -13,7 +13,8 @@ export function NotificationManagement() {
 
   useEffect(() => {
     if (user) {
-      notificationService.getUserNotifications(user.uid, 50)
+      notificationService
+        .getUserNotifications(user.uid, 50)
         .then(setNotifications)
         .finally(() => setLoading(false));
     }

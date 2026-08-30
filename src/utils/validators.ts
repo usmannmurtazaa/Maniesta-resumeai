@@ -31,6 +31,8 @@ export const jobPreferencesSchema = z.object({
   locations: z.array(z.string().min(1)).default([]),
   workModes: z.array(z.enum(['remote', 'hybrid', 'onsite'])).default([]),
   experienceLevels: z.array(z.enum(['entry', 'mid', 'senior', 'lead', 'executive'])).default([]),
-  employmentTypes: z.array(z.enum(['full-time', 'part-time', 'contract', 'internship', 'freelance'])).default([]),
+  employmentTypes: z
+    .array(z.enum(['full-time', 'part-time', 'contract', 'internship', 'freelance']))
+    .default([]),
   skills: z.array(z.string().min(1)).default([]),
 });

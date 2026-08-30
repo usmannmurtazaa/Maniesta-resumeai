@@ -14,7 +14,12 @@ describe('ATS Engine', () => {
     const incomplete = emptyResumeContent();
     const complete = {
       ...incomplete,
-      personalInfo: { fullName: 'John Doe', email: 'john@example.com', phone: '123-456-7890', location: 'NYC' },
+      personalInfo: {
+        fullName: 'John Doe',
+        email: 'john@example.com',
+        phone: '123-456-7890',
+        location: 'NYC',
+      },
       summary: 'Experienced software engineer...',
       experience: [{ id: '1', company: 'ABC', position: 'Engineer', description: 'Led team...' }],
       education: [{ id: '1', institution: 'MIT', degree: 'BS CS' }],

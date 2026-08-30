@@ -17,7 +17,10 @@ describe('adminService', () => {
   });
 
   it('getUsers sends request with auth header', async () => {
-    const mockResponse = { ok: true, json: vi.fn().mockResolvedValue({ users: [], lastVisible: null }) };
+    const mockResponse = {
+      ok: true,
+      json: vi.fn().mockResolvedValue({ users: [], lastVisible: null }),
+    };
     (global.fetch as any).mockResolvedValue(mockResponse);
     await adminService.getUsers();
     expect(global.fetch).toHaveBeenCalledWith(
@@ -29,7 +32,12 @@ describe('adminService', () => {
   });
 
   it('getAnalytics returns data', async () => {
-    const mockAnalytics = { users: { total: 10 }, resumes: { total: 5 }, ats: { totalAnalyses: 3 }, jobs: { total: 7 } };
+    const mockAnalytics = {
+      users: { total: 10 },
+      resumes: { total: 5 },
+      ats: { totalAnalyses: 3 },
+      jobs: { total: 7 },
+    };
     const mockResponse = { ok: true, json: vi.fn().mockResolvedValue(mockAnalytics) };
     (global.fetch as any).mockResolvedValue(mockResponse);
     const result = await adminService.getAnalytics();

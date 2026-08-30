@@ -1,7 +1,15 @@
 import type { JobPreferences, Job } from '@/types/job.types';
 
-export function calculateJobMatchScore(preferences: JobPreferences, job: Job): number {
-  if (!preferences) return 0;
+/**
+ * Calculates a deterministic match score between a user's job preferences
+ * and a job posting. The score ranges from 0 to 100.
+ */
+export function calculateJobMatchScore(
+  preferences: JobPreferences | null | undefined,
+  job: Job
+): number {
+  if (!preferences || !job) return 0;
+
   let score = 0;
   const weights = {
     category: 20,
@@ -12,22 +20,44 @@ export function calculateJobMatchScore(preferences: JobPreferences, job: Job): n
     skills: 20,
   };
 
-  if (preferences.categories?.includes(job.category)) score += weights.category;
-  if (preferences.locations?.some((loc) => job.location.toLowerCase().includes(loc.toLowerCase()))) {
+  // Category match
+  if (preferences.categories?.includes(job.category)) {
+    score += weights.category;
+  }
+
+  // Location match (fuzzy includes)
+  if (
+    preferences.locations?.some((loc) => job.location?.toLowerCase().includes(loc.toLowerCase()))
+  ) {
     score += weights.location;
   }
-  if (preferences.workModes?.includes(job.workMode)) score += weights.workMode;
-  if (preferences.experienceLevels?.includes(job.experienceLevel)) score += weights.experienceLevel;
-  if (preferences.employmentTypes?.includes(job.employmentType)) score += weights.employmentType;
 
+  // Work mode match
+  if (preferences.workModes?.includes(job.workMode)) {
+    score += weights.workMode;
+  }
+
+  // Experience level match
+  if (preferences.experienceLevels?.includes(job.experienceLevel)) {
+    score += weights.experienceLevel;
+  }
+
+  // Employment type match
+  if (preferences.employmentTypes?.includes(job.employmentType)) {
+    score += weights.employmentType;
+  }
+
+  // Skills match
   if (preferences.skills && preferences.skills.length > 0) {
-    const jobSkills = [...job.requiredSkills, ...job.preferredSkills];
+    const jobSkills = [...(job.requiredSkills || []), ...(job.preferredSkills || [])];
+    const normalizedJobSkills = jobSkills.map((s) => s.trim().toLowerCase());
     const matched = preferences.skills.filter((skill) =>
-      jobSkills.some((js) => js.toLowerCase() === skill.toLowerCase())
+      normalizedJobSkills.includes(skill.trim().toLowerCase())
     ).length;
     const skillRatio = Math.min(matched / preferences.skills.length, 1);
     score += Math.round(weights.skills * skillRatio);
   }
 
-  return Math.min(score, 100);
+  // Clamp between 0 and 100
+  return Math.max(0, Math.min(score, 100));
 }

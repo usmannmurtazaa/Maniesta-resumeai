@@ -1,20 +1,28 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/Button';
-import { ArrowRightIcon, SparklesIcon, CheckCircleIcon, ATSIcon, ResumeIcon } from '@/components/ui/icons';
+import {
+  ArrowRightIcon,
+  SparklesIcon,
+  CheckCircleIcon,
+  ATSIcon,
+  ResumeIcon,
+} from '@/components/ui/icons';
 
 export function HeroSection() {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <section className="relative overflow-hidden pt-28 pb-20 bg-gradient-to-br from-gray-50 via-white to-gray-100">
       {/* Animated background blobs */}
       <motion.div
         className="pointer-events-none absolute -top-32 left-1/4 h-96 w-96 rounded-full bg-primary-200/30 blur-3xl"
-        animate={{ y: [0, 20, 0], x: [0, 10, 0] }}
+        animate={prefersReducedMotion ? {} : { y: [0, 20, 0], x: [0, 10, 0] }}
         transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
       />
       <motion.div
         className="pointer-events-none absolute bottom-0 right-0 h-80 w-80 rounded-full bg-accent-200/30 blur-3xl"
-        animate={{ y: [0, -15, 0], x: [0, -5, 0] }}
+        animate={prefersReducedMotion ? {} : { y: [0, -15, 0], x: [0, -5, 0] }}
         transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
       />
 
@@ -22,7 +30,7 @@ export function HeroSection() {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left content */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
           >
@@ -37,13 +45,17 @@ export function HeroSection() {
               </span>
             </h1>
             <p className="mt-6 text-lg text-gray-600 max-w-xl">
-              Maniesta ResumeAI helps you create professional, ATS-optimized resumes in minutes. Improve your content with AI, match job descriptions, and export beautiful PDFs.
+              Maniesta ResumeAI helps you create professional, ATS-optimized resumes in minutes.
+              Improve your content with AI, match job descriptions, and export beautiful PDFs.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
               <Link to="/signup">
                 <Button size="lg" className="px-8 group">
                   Start Building Free
-                  <ArrowRightIcon size={18} className="ml-2 transition-transform group-hover:translate-x-1" />
+                  <ArrowRightIcon
+                    size={18}
+                    className="ml-2 transition-transform group-hover:translate-x-1"
+                  />
                 </Button>
               </Link>
               <Link to="/login">
@@ -70,13 +82,15 @@ export function HeroSection() {
 
           {/* Right visual with 3D depth */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, rotateY: -5 }}
+            initial={
+              prefersReducedMotion ? { opacity: 1 } : { opacity: 0, scale: 0.9, rotateY: -5 }
+            }
             animate={{ opacity: 1, scale: 1, rotateY: 0 }}
             transition={{ duration: 0.9, delay: 0.3, ease: 'easeOut' }}
             className="relative hidden lg:block [perspective:1000px]"
           >
             <motion.div
-              whileHover={{ rotateY: -2, rotateX: 1, scale: 1.02 }}
+              whileHover={prefersReducedMotion ? {} : { rotateY: -2, rotateX: 1, scale: 1.02 }}
               transition={{ type: 'spring', stiffness: 200, damping: 20 }}
               className="relative glass-card rounded-3xl p-6 shadow-glass"
             >
@@ -101,7 +115,7 @@ export function HeroSection() {
               {/* Floating ATS card */}
               <motion.div
                 className="absolute -right-6 -bottom-6 w-48 glass-card rounded-2xl p-4 shadow-glass"
-                animate={{ y: [0, -8, 0] }}
+                animate={prefersReducedMotion ? {} : { y: [0, -8, 0] }}
                 transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
               >
                 <div className="flex items-center justify-between">
@@ -119,7 +133,7 @@ export function HeroSection() {
               {/* Floating AI suggestion card */}
               <motion.div
                 className="absolute -left-6 top-1/3 w-56 glass-card rounded-2xl p-4 shadow-glass"
-                animate={{ y: [0, 8, 0] }}
+                animate={prefersReducedMotion ? {} : { y: [0, 8, 0] }}
                 transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
               >
                 <div className="flex items-center gap-2">

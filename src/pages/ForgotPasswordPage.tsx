@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { authService } from '@/services/firebase/auth';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { useToast } from '@/contexts/ToastContext';
 import { AuthSplitLayout } from '@/components/auth/AuthSplitLayout';
+import { PageTransition } from '@/components/common/PageTransition';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -27,35 +29,46 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <AuthSplitLayout visualType="login">
-      <form onSubmit={handleSubmit} className="space-y-5">
-        <div>
-          <h1 className="text-3xl font-display font-bold text-gray-900">Reset Password</h1>
-          <p className="mt-1 text-sm text-gray-600">
-            Enter your email address and we&apos;ll send you a link to reset your password.
+    <PageTransition>
+      <AuthSplitLayout visualType="login">
+        <motion.form
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          onSubmit={handleSubmit}
+          className="space-y-5"
+        >
+          <div>
+            <h1 className="text-3xl font-display font-bold text-gray-900">Reset Password</h1>
+            <p className="mt-1 text-sm text-gray-600">
+              Enter your email address and we&apos;ll send you a link to reset your password.
+            </p>
+          </div>
+
+          <Input
+            type="email"
+            label="Email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          <Button type="submit" disabled={submitting} className="w-full">
+            {submitting ? 'Sending...' : 'Send Reset Link'}
+          </Button>
+
+          <p className="text-center text-sm text-gray-600">
+            Remember your password?{' '}
+            <Link
+              to="/login"
+              className="font-medium text-primary-600 hover:text-primary-500 transition-colors"
+            >
+              Log in
+            </Link>
           </p>
-        </div>
-
-        <Input
-          type="email"
-          label="Email"
-          placeholder="you@example.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-
-        <Button type="submit" disabled={submitting} className="w-full">
-          {submitting ? 'Sending...' : 'Send Reset Link'}
-        </Button>
-
-        <p className="text-center text-sm text-gray-600">
-          Remember your password?{' '}
-          <Link to="/login" className="font-medium text-primary-600 hover:text-primary-500">
-            Log in
-          </Link>
-        </p>
-      </form>
-    </AuthSplitLayout>
+        </motion.form>
+      </AuthSplitLayout>
+    </PageTransition>
   );
 }

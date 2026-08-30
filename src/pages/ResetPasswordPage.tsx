@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { useToast } from '@/contexts/ToastContext';
 import { AuthSplitLayout } from '@/components/auth/AuthSplitLayout';
+import { PageTransition } from '@/components/common/PageTransition';
 
 export default function ResetPasswordPage() {
   const [searchParams] = useSearchParams();
@@ -38,33 +39,35 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <AuthSplitLayout visualType="signup">
-      <form onSubmit={handleSubmit} className="space-y-5">
-        <div>
-          <h1 className="text-3xl font-display font-bold text-gray-900">Set New Password</h1>
-          <p className="mt-1 text-sm text-gray-600">Enter your new password below.</p>
-        </div>
+    <PageTransition>
+      <AuthSplitLayout visualType="signup">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <h1 className="text-3xl font-display font-bold text-gray-900">Set New Password</h1>
+            <p className="mt-1 text-sm text-gray-600">Enter your new password below.</p>
+          </div>
 
-        <Input
-          type="password"
-          label="New Password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          required
-          minLength={6}
-        />
-        <Input
-          type="password"
-          label="Confirm New Password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-        />
+          <Input
+            type="password"
+            label="New Password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            required
+            minLength={6}
+          />
+          <Input
+            type="password"
+            label="Confirm New Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
 
-        <Button type="submit" disabled={submitting} className="w-full">
-          {submitting ? 'Updating...' : 'Update Password'}
-        </Button>
-      </form>
-    </AuthSplitLayout>
+          <Button type="submit" disabled={submitting} className="w-full">
+            {submitting ? 'Updating...' : 'Update Password'}
+          </Button>
+        </form>
+      </AuthSplitLayout>
+    </PageTransition>
   );
 }

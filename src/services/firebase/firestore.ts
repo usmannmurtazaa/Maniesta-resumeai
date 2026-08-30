@@ -63,9 +63,7 @@ export const resumeService = {
   async getUserResumes(userId: string): Promise<Resume[]> {
     const q = query(collection(db, 'resumes'), where('userId', '==', userId));
     const snapshot = await getDocs(q);
-    const resumes = snapshot.docs.map((doc) =>
-      convertResumeDates({ id: doc.id, ...doc.data() })
-    );
+    const resumes = snapshot.docs.map((doc) => convertResumeDates({ id: doc.id, ...doc.data() }));
     // Sort by updatedAt descending
     resumes.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
     return resumes;
